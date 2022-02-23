@@ -12,7 +12,7 @@ public interface UserServiceInterface {
     User save(UserRegistrationDto userRegistrationDto);
     List<User> findAll();
     User findOne(String email);
-    boolean existsUserBuddyByEmail(String email);
+    boolean existsUserByEmail(String email);
     User save(UserProfileDto userDto);
     User unsuscribe(UserDto userDto);
 }

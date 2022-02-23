@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SuscribeController {
 
+    @Autowired
     UserServiceInterface userServiceInterface;
 
     RoleServiceInterface roleServiceInterface;
@@ -41,7 +42,7 @@ public class SuscribeController {
         //Verify if user already exist or account inactive
         User user = userServiceInterface.findOne(userRegistrationDto.getEmail());
 
-        if (userServiceInterface.existsUserBuddyByEmail(userRegistrationDto.getEmail())) {
+        if (userServiceInterface.existsUserByEmail(userRegistrationDto.getEmail())) {
             Boolean active = user.isActive();
             if(!active) {
                 return "redirect:/suscribe?inactive";

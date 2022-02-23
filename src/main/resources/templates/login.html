@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+          crossorigin="anonymous">
+
+    <link href=signin.css rel="stylesheet">
+
+    <title>Login</title>
+
+    <style>
+        body {
+            padding-top: 50px;
+        }
+
+        .special {
+            padding-top: 50px;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid vh-100">
+    <div class="row justify-content-center vh-100">
+
+        <div class=" col-md-6 col-md-offset-6">
+
+            <div class="card bg-light mb-3 h-75 pb-100">
+                <div class="card-header"></div>
+                <div class="card-body text-center">
+                    <button class="btndisabled btn btn-success center-block disabled">Pay
+                        my buddy</button>
+
+
+                    <!-- Login form -->
+                    <form th:action="@{/login}" method="POST" class="form-signin">
+
+                        <!-- email user -->
+                        <div class="form-group">
+                            <label for="email"></label> <input type="email"
+                                                               class="form-control" id="email" name="username"
+                                                               aria-describedby="emailHelp" th:placeholder="Email"
+                                                               autofocus="autofocus">
+                        </div>
+
+                        <!-- password user -->
+                        <div class="form-group">
+                            <label for="exampleInputPassword1"></label> <input
+                                type="password" class="form-control" id="password"
+                                name="password" th:placeholder="Password" autofocus="autofocus">
+                        </div>
+
+                        <!-- error message -->
+                        <div align="center" th:if="${param.error}">
+                            <p style="font-size: 20; color: #FF1C19;">Username or password is invalid</p>
+                        </div>
+
+
+                        <!-- Logout message -->
+                        <div th:if="${param.logout}" class="mt-1">
+                            <div class="alert alert-info">You have been logged out.</div>
+                        </div>
+
+                        <!-- Logout message -->
+                        <div th:if="${param.unsuscribe}" class="mt-1">
+                            <div class="alert alert-info">You have been unsuscribe.</div>
+                        </div>
+
+
+
+                        <br> <br>
+
+
+                        <!-- submit button -->
+                        <button type="submit" class="btn btn-primary" th:text="Login">Login</button>
+                        <p>
+                            I don't have an account ? <a class="link" th:href="@{/suscribe}">Register Now !</a>
+                        </p>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+<script
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+</body>
+</html>

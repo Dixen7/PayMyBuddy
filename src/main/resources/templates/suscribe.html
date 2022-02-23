@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+	integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+	crossorigin="anonymous">
+
+<link href=signin.css rel="stylesheet">
+
+<title>Suscribe</title>
+
+<style>
+body {
+	padding-top: 50px;
+}
+
+.special {
+	padding-top: 50px;
+}
+</style>
+</head>
+<body>
+	<div class="container-fluid vh-100">
+		<div class="row justify-content-center vh-100">
+			<div class=" col-md-6 col-md-offset-6">
+
+				<div class="card bg-light mb-3 h-75 pb-100">
+					<div class="card-header"></div>
+					<div class="card-body text-center">
+						<button class="btndisabled btn btn-success center-block disabled">Pay
+							my buddy</button>
+
+						<!-- Registration form -->
+
+						<form th:action="@{/suscribe}" method="POST" th:object="${user}">
+
+							<!-- success message -->
+							<div th:if="${param.successRegistration}" class="mt-1">
+								<div class="alert alert-info">You've successfully
+									registered to our app! Click to login now link to connect !</div>
+							</div>
+
+							<!-- success message -->
+							<div th:if="${param.problem}" class="mt-1">
+								<div class="alert alert-warning">problem during save</div>
+							</div>
+
+							<!-- error message -->
+							<div th:if="${param.error}" class="mt-1">
+								<div class="alert alert-warning">Email account already
+									exist !!</div>
+							</div>
+
+							<!-- error message -->
+							<div th:if="${param.inactive}" class="mt-1">
+								<div class="alert alert-warning">your account has been
+									deactivated at your request, you can contact us if you wish to
+									re-activate it !!</div>
+							</div>
+
+							<!-- User email -->
+
+							<div class="form-group">
+								<label for="Email"></label> <input type="email"
+									class="form-control" id="email" name="email"
+									aria-describedby="emailHelp" placeholder="Email"
+									th:field="*{email}" required autofocus="autofocus" />
+							</div>
+
+							<!-- User password -->
+
+							<div class="form-group">
+								<label for="password"></label> <input type="password"
+									class="form-control" id="password" name="password"
+									placeholder="Password" th:field="*{password}" required
+									autofocus="autofocus" />
+							</div>
+
+
+							<p></p>
+
+							<!-- Submit btn -->
+
+							<button type="submit" class="btn btn-primary">Register</button>
+							<p>
+								I already have an account ? <a class="link" th:href="@{/login}">Login
+									Now !</a>
+							</p>
+						</form>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+		integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+		integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+		crossorigin="anonymous"></script>
+</body>
+</html>

@@ -41,22 +41,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .csrf().disable()
-            .httpBasic().and()
-            .authorizeRequests()
-            .antMatchers("/admin").hasRole("ADMIN")
-            .antMatchers("/home", "/transfer", "/contact", "/profile", "/unsuscribe").hasAnyRole("ADMIN","USER")
-            .antMatchers("/login", "/suscribe", "/css/**").permitAll()
-            .and()
-            .formLogin().loginPage("/login")
-            .defaultSuccessUrl("/home", true)
-            .failureUrl("/login?error=true")
-            .and()
-            .logout().deleteCookies("JSESSIONID")
-            .invalidateHttpSession(true)
-            .clearAuthentication(true)
-            .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-            .logoutSuccessUrl("/login?logout");
+        .csrf().disable()
+        .httpBasic().and()
+        .authorizeRequests()
+        .antMatchers("/admin").hasRole("ADMIN")
+        .antMatchers("/home", "/transfer", "/contact", "/profile", "/unsuscribe").hasAnyRole("ADMIN","USER")
+        .antMatchers("/login", "/suscribe", "/css/**").permitAll()
+        .and()
+        .formLogin().loginPage("/login")
+        .defaultSuccessUrl("/home", true)
+        .failureUrl("/login?error=true")
+        .and()
+        .logout().deleteCookies("JSESSIONID")
+        .invalidateHttpSession(true)
+        .clearAuthentication(true)
+        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+        .logoutSuccessUrl("/login?logout");
 
     }
 }

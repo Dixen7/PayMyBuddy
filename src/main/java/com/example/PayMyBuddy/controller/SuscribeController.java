@@ -1,9 +1,7 @@
 package com.example.PayMyBuddy.controller;
 
-
 import com.example.PayMyBuddy.model.Dto.UserRegistrationDto;
 import com.example.PayMyBuddy.model.User;
-import com.example.PayMyBuddy.service.Interface.RoleServiceInterface;
 import com.example.PayMyBuddy.service.Interface.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,9 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SuscribeController {
 
+    @Autowired
     UserServiceInterface userServiceInterface;
-
-    RoleServiceInterface roleServiceInterface;
 
     @ModelAttribute("user")
     public UserRegistrationDto userRegistrationDto() {
@@ -54,6 +51,5 @@ public class SuscribeController {
         }
 
     }
-
 
 }

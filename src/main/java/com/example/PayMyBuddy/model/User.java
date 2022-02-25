@@ -1,8 +1,5 @@
 package com.example.PayMyBuddy.model;
 
-import com.sun.istack.NotNull;
-import lombok.Data;
-
 import java.util.Collection;
 import java.util.Set;
 
@@ -13,11 +10,16 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import lombok.Data;
 
 @Data
 @Entity
@@ -26,12 +28,12 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "user_id")
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false,unique =true)
     @NotNull
-    @Size(max = 50, message = "Email must be less than 50 characters")
+    @Size(max = 254, message = "Email must be less than 50 characters")
     private String email;
 
     @NotNull
@@ -46,13 +48,22 @@ public class User {
     private String firstName;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "user_id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "role_id", referencedColumnName = "role_id"))
     private Collection<Role> roles;
 
     @OneToOne
+    @JoinColumn(name = "bank_account_id")
     private BankAccount bankAccount;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @JoinTable(name = "connexion", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"), inverseJoinColumns = @JoinColumn(name = "user_associate_id", referencedColumnName = "user_id"))
     private Set<User> contacts;
+
     private boolean active = true;
 
 }

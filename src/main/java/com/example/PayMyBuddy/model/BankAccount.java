@@ -31,7 +31,7 @@ public class BankAccount {
     @Column(name = "bic")
     private String bic;
 
-    @Size(max = 20, message = "Holder must be less than 10 characters")
+    @Size(max = 50, message = "Holder must be less than 10 characters")
     @Column(name = "holder")
     private String holder;
 

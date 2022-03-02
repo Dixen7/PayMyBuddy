@@ -28,9 +28,6 @@ public class HomeController {
     @Autowired
     UserServiceInterface userServiceI;
 
-    @Autowired
-    AccountServiceInterface accountServiceI;
-
     @GetMapping
     public String home(Model model) {
         log.info("Request get /home called");
@@ -40,14 +37,6 @@ public class HomeController {
         String username = authentication.getName();
 
         User user = userServiceI.findOne(username);
-        Account account = accountServiceI.findByUserAccountId(user);
-        BankAccount bankAccount = user.getBankAccount();
-
-/*
-        // Serve user information to view
-        model.addAttribute("account", account);
-        model.addAttribute("bankAccount", bankAccount);
-*/
 
         // Return home page or admin page according to role
         Collection<Role> roles = user.getRoles();

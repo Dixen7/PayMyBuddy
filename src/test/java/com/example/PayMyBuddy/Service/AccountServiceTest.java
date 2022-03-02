@@ -26,7 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 class AccountServiceTest {
 
     @MockBean
-    @Qualifier("userDetailsServiceImpl")
     private UserDetailsService userDetailsService;
 
     @MockBean

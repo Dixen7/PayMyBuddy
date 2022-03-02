@@ -36,7 +36,6 @@ import lombok.extern.slf4j.Slf4j;
 class UserServiceTest {
 
     @MockBean
-    @Qualifier("userDetailsServiceImpl")
     private UserDetailsService userDetailsService;
 
     @MockBean
@@ -109,7 +108,7 @@ class UserServiceTest {
         user.setPassword("0000");
 
         userSave.setId(1L);
-        userSave.setEmail("Clement@gmail.com");
+        userSave.setEmail("clement@gmail.com");
         userSave.setPassword("0000");
 
         when(userBuddyRepository.findByemail(user.getEmail())).thenReturn(user);
@@ -133,12 +132,12 @@ class UserServiceTest {
     void testUnsuscribe() {
 
         UserDto userDto = new UserDto();
-        userDto.setEmail("email");
-        userDto.setEmailConfirm("email");
+        userDto.setEmail("email@email.fr");
+        userDto.setEmailConfirm("email@email.fr");
 
         User user = new User();
         user.setActive(true);
-        user.setEmail("email");
+        user.setEmail("email@email.fr");
         user.setPassword("0000");
 
         Account account = new Account();
@@ -147,7 +146,7 @@ class UserServiceTest {
 
         User userToSave = new User();
         userToSave.setActive(true);
-        userToSave.setEmail("email");
+        userToSave.setEmail("email@email.fr");
         userToSave.setPassword("0000");
 
         when(userBuddyRepository.findByemail(userDto.getEmail())).thenReturn(user);

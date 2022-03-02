@@ -94,7 +94,7 @@ public class UserService implements UserServiceInterface {
         User user = new User();
 
         user = userRepository.findByemail(userDto.getEmail());
-        // get the user with getOne() method fr update in database
+        // get the user with getOne() method for update in database
         User userToUpdate = userRepository.getOne(user.getId());
         log.debug("userToUpdate : " + userToUpdate);
 
@@ -114,16 +114,16 @@ public class UserService implements UserServiceInterface {
     @Override
     public User unsuscribe(UserDto userDto) {
         User user = new User();
-
         user = userRepository.findByemail(userDto.getEmail());
         Account account = accountServiceInterface.findByUserAccountId(user);
+
         if(!account.getBalance().equals(new BigDecimal("0.00")) ){
             return null;
         }
+
         User userToUpdate = userRepository.getOne(user.getId());
         // set inactive
         userToUpdate.setActive(false);
-
         User userBuddy =  userRepository.save(userToUpdate);
         log.debug("user inactive: " + userBuddy);
         return userBuddy;

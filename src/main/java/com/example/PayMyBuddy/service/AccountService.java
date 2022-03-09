@@ -24,7 +24,7 @@ public class AccountService implements AccountServiceInterface {
 
     @Override
     public String save(User user) {
-        // Create an account when new user suscribe
+        // Create an account when new user subscribe
         Account account = new Account();
         account.setBalance(new BigDecimal("0"));
         account.setUser(user);

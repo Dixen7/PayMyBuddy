@@ -10,8 +10,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.PayMyBuddy.configuration.SecurityConfig;
-import com.example.PayMyBuddy.controller.SuscribeController;
-import com.example.PayMyBuddy.model.Dto.UserRegistrationDto;
+import com.example.PayMyBuddy.controller.SubscribeController;
+import com.example.PayMyBuddy.model.dto.UserRegistrationDto;
 import com.example.PayMyBuddy.model.User;
 import com.example.PayMyBuddy.service.Interface.UserServiceInterface;
 import com.example.PayMyBuddy.service.RoleService;
@@ -32,9 +32,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = SecurityConfig.class)
-@WebMvcTest(controllers = SuscribeController.class)
-@Import(SuscribeController.class)
-class SuscribeControllerTest {
+@WebMvcTest(controllers = SubscribeController.class)
+@Import(SubscribeController.class)
+class SubscribeControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -51,8 +51,8 @@ class SuscribeControllerTest {
 
     @Test
     void testShouldReturnDefaultMessage() throws Exception {
-        this.mockMvc.perform(get("/suscribe")).andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString("suscribe")));
+        this.mockMvc.perform(get("/subscribe")).andDo(print()).andExpect(status().isOk())
+                .andExpect(content().string(containsString("subscribe")));
 
     }
 
@@ -68,13 +68,13 @@ class SuscribeControllerTest {
 
         when(userServiceInterface.findOne(userRegistrationDto.getEmail())).thenReturn(user);
 
-        RequestBuilder request = post("/suscribe")
+        RequestBuilder request = post("/subscribe")
                 .param("email", userRegistrationDto.getEmail())
                 .param("password", userRegistrationDto.getPassword());
 
         mockMvc.perform(request)
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(redirectedUrl("/suscribe?successRegistration"));
+                .andExpect(redirectedUrl("/subscribe?successRegistration"));
     }
 
     @Test
@@ -93,13 +93,13 @@ class SuscribeControllerTest {
 
         when(userServiceInterface.existsUserByEmail(userRegistrationDto.getEmail())).thenReturn(true);
 
-        RequestBuilder request = post("/suscribe")
+        RequestBuilder request = post("/subscribe")
                 .param("email", userRegistrationDto.getEmail())
                 .param("password", userRegistrationDto.getPassword());
 
         mockMvc.perform(request)
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(redirectedUrl("/suscribe?error"));
+                .andExpect(redirectedUrl("/subscribe?error"));
     }
 
 }

@@ -1,6 +1,6 @@
 package com.example.PayMyBuddy.controller;
 
-import com.example.PayMyBuddy.model.Dto.UserRegistrationDto;
+import com.example.PayMyBuddy.model.dto.UserRegistrationDto;
 import com.example.PayMyBuddy.model.User;
 import com.example.PayMyBuddy.service.Interface.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
-@RequestMapping("/suscribe")
+@RequestMapping("/subscribe")
 @Slf4j
-public class SuscribeController {
+public class SubscribeController {
 
     @Autowired
     UserServiceInterface userServiceInterface;
@@ -28,7 +28,7 @@ public class SuscribeController {
 
     @GetMapping
     public String showRegistrationForm() {
-        return "suscribe";
+        return "subscribe";
     }
 
     @PostMapping
@@ -41,13 +41,13 @@ public class SuscribeController {
         if (userServiceInterface.existsUserByEmail(userRegistrationDto.getEmail())) {
             Boolean active = user.isActive();
             if(!active) {
-                return "redirect:/suscribe?inactive";
+                return "redirect:/subscribe?inactive";
             }
-            return "redirect:/suscribe?error";
+            return "redirect:/subscribe?error";
         }
         else {
             userServiceInterface.register(userRegistrationDto);
-            return "redirect:/suscribe?successRegistration";
+            return "redirect:/subscribe?successRegistration";
         }
 
     }

@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface UserServiceInterface {
 
-    User save(UserRegistrationDto userRegistrationDto);
+    User register(UserRegistrationDto userRegistrationDto);
     List<User> findAll();
     User findOne(String email);
     boolean existsUserByEmail(String email);

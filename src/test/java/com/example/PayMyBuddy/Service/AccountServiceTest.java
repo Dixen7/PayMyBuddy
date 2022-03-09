@@ -32,7 +32,7 @@ class AccountServiceTest {
     AccountRepository accountRepository;
 
     @MockBean
-    UserServiceInterface userBuddyServiceInterface;
+    UserServiceInterface userServiceInterface;
 
     @Autowired
     AccountService accountService;

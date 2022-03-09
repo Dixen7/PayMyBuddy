@@ -46,7 +46,7 @@ public class SuscribeController {
             return "redirect:/suscribe?error";
         }
         else {
-            userServiceInterface.save(userRegistrationDto);
+            userServiceInterface.register(userRegistrationDto);
             return "redirect:/suscribe?successRegistration";
         }
 

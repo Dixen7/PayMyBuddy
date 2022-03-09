@@ -17,7 +17,6 @@ import com.example.PayMyBuddy.service.Interface.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 
 import lombok.extern.slf4j.Slf4j;
@@ -41,14 +40,12 @@ public class UserService implements UserServiceInterface {
      * @return userBuddy
      */
     @Override
-    @Transactional
-    public User save(UserRegistrationDto userRegistrationDto) {
+    public User register(UserRegistrationDto userRegistrationDto) {
 
         User userSet = userSet(userRegistrationDto);
-        User userBuddy = userRepository.save(userSet);
-        accountServiceInterface.save(userBuddy);
-
-        return userBuddy;
+        User user = userRepository.save(userSet);
+        accountServiceInterface.save(user);
+        return user;
     }
 
     /**
@@ -61,7 +58,6 @@ public class UserService implements UserServiceInterface {
 
         user.setEmail(userRegistrationDto.getEmail());
         user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
-        // TODO this to add an admin account, have to remove after create
         if(userRegistrationDto.getEmail().equalsIgnoreCase("admin@paymybuddy.com")) {
             user.setRoles(Arrays.asList(new Role("ROLE_ADMIN")));
         }else {
@@ -77,12 +73,12 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public User findOne(String email) {
-        return userRepository.findByemail(email);
+        return userRepository.findByEmail(email);
     }
 
     @Override
     public boolean existsUserByEmail(String email) {
-        return userRepository.existsUserBuddyByEmail(email);
+        return userRepository.existsUserByEmail(email);
     }
 
     /**
@@ -93,7 +89,7 @@ public class UserService implements UserServiceInterface {
     public User save(UserProfileDto userDto) {
         User user = new User();
 
-        user = userRepository.findByemail(userDto.getEmail());
+        user = userRepository.findByEmail(userDto.getEmail());
         // get the user with getOne() method fr update in database
         User userToUpdate = userRepository.getOne(user.getId());
         log.debug("userToUpdate : " + userToUpdate);
@@ -109,13 +105,14 @@ public class UserService implements UserServiceInterface {
 
     /**
      * Service for unsuscribe user and set inactive profile
+     * @param userDto
      * @return
      */
     @Override
     public User unsuscribe(UserDto userDto) {
         User user = new User();
 
-        user = userRepository.findByemail(userDto.getEmail());
+        user = userRepository.findByEmail(userDto.getEmail());
         Account account = accountServiceInterface.findByUserAccountId(user);
         if(!account.getBalance().equals(new BigDecimal("0.00")) ){
             return null;

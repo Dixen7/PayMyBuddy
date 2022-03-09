@@ -72,9 +72,7 @@ class SuscribeControllerTest {
                 .param("email", userRegistrationDto.getEmail())
                 .param("password", userRegistrationDto.getPassword());
 
-        // ACT AND ASSERT
-        mockMvc
-                .perform(request)
+        mockMvc.perform(request)
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(redirectedUrl("/suscribe?successRegistration"));
     }
@@ -99,9 +97,7 @@ class SuscribeControllerTest {
                 .param("email", userRegistrationDto.getEmail())
                 .param("password", userRegistrationDto.getPassword());
 
-        // ACT AND ASSERT
-        mockMvc
-                .perform(request)
+        mockMvc.perform(request)
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(redirectedUrl("/suscribe?error"));
     }

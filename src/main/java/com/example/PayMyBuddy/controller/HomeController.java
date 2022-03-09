@@ -1,12 +1,8 @@
 package com.example.PayMyBuddy.controller;
-import java.math.BigDecimal;
 import java.util.Collection;
 
-import com.example.PayMyBuddy.model.Account;
-import com.example.PayMyBuddy.model.BankAccount;
 import com.example.PayMyBuddy.model.Role;
 import com.example.PayMyBuddy.model.User;
-import com.example.PayMyBuddy.service.Interface.AccountServiceInterface;
 import com.example.PayMyBuddy.service.Interface.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -26,10 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class HomeController {
 
     @Autowired
-    UserServiceInterface userServiceI;
-
-    @Autowired
-    AccountServiceInterface accountServiceI;
+    UserServiceInterface userServiceInterface;
 
     @GetMapping
     public String home(Model model) {
@@ -39,15 +32,7 @@ public class HomeController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
 
-        User user = userServiceI.findOne(username);
-        Account account = accountServiceI.findByUserAccountId(user);
-        BankAccount bankAccount = user.getBankAccount();
-
-/*
-        // Serve user information to view
-        model.addAttribute("account", account);
-        model.addAttribute("bankAccount", bankAccount);
-*/
+        User user = userServiceInterface.findOne(username);
 
         // Return home page or admin page according to role
         Collection<Role> roles = user.getRoles();

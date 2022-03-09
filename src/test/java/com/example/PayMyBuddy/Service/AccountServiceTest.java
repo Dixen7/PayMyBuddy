@@ -26,14 +26,13 @@ import lombok.extern.slf4j.Slf4j;
 class AccountServiceTest {
 
     @MockBean
-    @Qualifier("userDetailsServiceImpl")
     private UserDetailsService userDetailsService;
 
     @MockBean
     AccountRepository accountRepository;
 
     @MockBean
-    UserServiceInterface userBuddyServiceInterface;
+    UserServiceInterface userServiceInterface;
 
     @Autowired
     AccountService accountService;

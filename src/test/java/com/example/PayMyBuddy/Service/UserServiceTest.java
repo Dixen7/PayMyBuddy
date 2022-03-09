@@ -21,7 +21,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -36,20 +35,19 @@ import lombok.extern.slf4j.Slf4j;
 class UserServiceTest {
 
     @MockBean
-    @Qualifier("userDetailsServiceImpl")
     private UserDetailsService userDetailsService;
 
     @MockBean
-    UserRepository userBuddyRepository;
+    UserRepository userRepository;
 
     @MockBean
-    AccountService accountServiceI;
+    AccountService accountServiceInterface;
 
     @Autowired
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    UserService userBuddyServiceImpl;
+    UserService userService;
 
     UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
     User user = new User();
@@ -62,27 +60,27 @@ class UserServiceTest {
         userRegistrationDto.setEmail("user1@gmail.com");
         userRegistrationDto.setPassword("user");
         userSave.setEmail("user1@gmail.com");
-        userSave.setPassword("$2a$10$zTw9tVKQ8YVat8G2uc2W4O3xko1AB4UAZDYrofKPyn7.uxqt9OCQ2");
+        userSave.setPassword("0000");
         account.setUser(userSave);
 
-        when(userBuddyRepository.save(Mockito.any(User.class))).thenReturn(userSave);
-        userBuddyServiceImpl.save(userRegistrationDto);
+        when(userRepository.save(Mockito.any(User.class))).thenReturn(userSave);
+        userService.register(userRegistrationDto);
 
-        verify(userBuddyRepository, times(1)).save(Mockito.any(User.class));
-        verify(accountServiceI, times(1)).save(Mockito.any(User.class));
+        verify(userRepository, times(1)).save(Mockito.any(User.class));
+        verify(accountServiceInterface, times(1)).save(Mockito.any(User.class));
 
     }
 
     @Test
     void testFindAll() {
-        userBuddyServiceImpl.findAll();
-        verify(userBuddyRepository, times(1)).findAll();
+        userService.findAll();
+        verify(userRepository, times(1)).findAll();
     }
 
     @Test
     void testFindOne() {
-        userBuddyServiceImpl.findOne("mail");
-        verify(userBuddyRepository, times(1)).findByemail("mail");
+        userService.findOne("mail");
+        verify(userRepository, times(1)).findByEmail("mail");
     }
 
     @Test
@@ -90,7 +88,7 @@ class UserServiceTest {
         userRegistrationDto.setEmail("user1@gmail.com");
         userRegistrationDto.setPassword("user");
 
-        User user = userBuddyServiceImpl.userSet(userRegistrationDto);
+        User user = userService.userSet(userRegistrationDto);
 
         assertThat(user.getPassword()).isNotEqualToIgnoringCase("user");
         assertThat(user.getRoles()).toString().contains("ROLE_USER");
@@ -112,21 +110,21 @@ class UserServiceTest {
         userSave.setEmail("Clement@gmail.com");
         userSave.setPassword("0000");
 
-        when(userBuddyRepository.findByemail(user.getEmail())).thenReturn(user);
-        when(userBuddyRepository.getOne(user.getId())).thenReturn(userSave);
-        when(userBuddyRepository.save(userSave)).thenReturn(new User());
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
+        when(userRepository.getOne(user.getId())).thenReturn(userSave);
+        when(userRepository.save(userSave)).thenReturn(new User());
 
-        userBuddyServiceImpl.save(userDto);
+        userService.save(userDto);
 
         assertThat(userSave.getFirstName()).isEqualToIgnoringCase("clement");
-        verify(userBuddyRepository).save(userSave);
+        verify(userRepository).save(userSave);
 
     }
 
     @Test
     void testExistUserByEmail() {
-        userBuddyServiceImpl.existsUserByEmail("mail");
-        verify(userBuddyRepository, times(1)).existsUserBuddyByEmail("mail");
+        userService.existsUserByEmail("mail");
+        verify(userRepository, times(1)).existsUserByEmail("mail");
     }
 
     @Test
@@ -150,12 +148,12 @@ class UserServiceTest {
         userToSave.setEmail("email");
         userToSave.setPassword("0000");
 
-        when(userBuddyRepository.findByemail(userDto.getEmail())).thenReturn(user);
-        when(userBuddyRepository.getOne(user.getId())).thenReturn(userToSave);
-        when(userBuddyRepository.save(userToSave)).thenReturn(userToSave);
-        when(accountServiceI.findByUserAccountId(user)).thenReturn(account);
+        when(userRepository.findByEmail(userDto.getEmail())).thenReturn(user);
+        when(userRepository.getOne(user.getId())).thenReturn(userToSave);
+        when(userRepository.save(userToSave)).thenReturn(userToSave);
+        when(accountServiceInterface.findByUserAccountId(user)).thenReturn(account);
 
-        User userSave = userBuddyServiceImpl.unsuscribe(userDto);
+        User userSave = userService.unsuscribe(userDto);
         assertThat(userSave.isActive()).isEqualTo(false);
     }
 

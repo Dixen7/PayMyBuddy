@@ -6,9 +6,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.example.PayMyBuddy.model.Account;
-import com.example.PayMyBuddy.model.Dto.UserDto;
-import com.example.PayMyBuddy.model.Dto.UserProfileDto;
-import com.example.PayMyBuddy.model.Dto.UserRegistrationDto;
+import com.example.PayMyBuddy.model.dto.UserDto;
+import com.example.PayMyBuddy.model.dto.UserProfileDto;
+import com.example.PayMyBuddy.model.dto.UserRegistrationDto;
 import com.example.PayMyBuddy.model.Role;
 import com.example.PayMyBuddy.model.User;
 import com.example.PayMyBuddy.repository.UserRepository;
@@ -103,12 +103,12 @@ public class UserService implements UserServiceInterface {
     }
 
     /**
-     * Service for unsuscribe user and set inactive profile
+     * Service for unsubscribe user and set inactive profile
      * @param userDto
      * @return
      */
     @Override
-    public User unsuscribe(UserDto userDto) {
+    public User unsubscribe(UserDto userDto) {
         User user = new User();
         user = userRepository.findByEmail(userDto.getEmail());
 

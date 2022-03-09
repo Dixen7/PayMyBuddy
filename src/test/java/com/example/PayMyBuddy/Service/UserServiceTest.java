@@ -9,9 +9,9 @@ import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 
 import com.example.PayMyBuddy.model.Account;
-import com.example.PayMyBuddy.model.Dto.UserDto;
-import com.example.PayMyBuddy.model.Dto.UserProfileDto;
-import com.example.PayMyBuddy.model.Dto.UserRegistrationDto;
+import com.example.PayMyBuddy.model.dto.UserDto;
+import com.example.PayMyBuddy.model.dto.UserProfileDto;
+import com.example.PayMyBuddy.model.dto.UserRegistrationDto;
 import com.example.PayMyBuddy.model.User;
 import com.example.PayMyBuddy.repository.UserRepository;
 import com.example.PayMyBuddy.service.AccountService;
@@ -128,7 +128,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testUnsuscribe() {
+    void testUnsubscribe() {
 
         UserDto userDto = new UserDto();
         userDto.setEmail("email@email.fr");
@@ -153,7 +153,7 @@ class UserServiceTest {
         when(userRepository.save(userToSave)).thenReturn(userToSave);
         when(accountServiceInterface.findByUserAccountId(user)).thenReturn(account);
 
-        User userSave = userService.unsuscribe(userDto);
+        User userSave = userService.unsubscribe(userDto);
         assertThat(userSave.isActive()).isEqualTo(false);
     }
 

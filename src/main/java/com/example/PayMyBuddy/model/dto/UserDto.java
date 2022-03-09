@@ -1,4 +1,4 @@
-package com.example.PayMyBuddy.model.Dto;
+package com.example.PayMyBuddy.model.dto;
 
 import lombok.Data;
 

@@ -1,6 +1,6 @@
 package com.example.PayMyBuddy.service.Interface;
 
-import com.example.PayMyBuddy.model.Dto.UserConnectionDto;
+import com.example.PayMyBuddy.model.dto.UserConnectionDto;
 
 public interface ConnectionServiceInterface {
 

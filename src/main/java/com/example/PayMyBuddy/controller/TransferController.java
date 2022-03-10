@@ -9,7 +9,9 @@ import com.example.PayMyBuddy.model.Transaction;
 import com.example.PayMyBuddy.model.Type;
 import com.example.PayMyBuddy.model.User;
 import com.example.PayMyBuddy.model.dto.TransactionDto;
+import com.example.PayMyBuddy.model.dto.UserConnectionDto;
 import com.example.PayMyBuddy.service.Interface.AccountServiceInterface;
+import com.example.PayMyBuddy.service.Interface.ConnectionServiceInterface;
 import com.example.PayMyBuddy.service.Interface.TransactionServiceInterface;
 import com.example.PayMyBuddy.service.Interface.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +37,8 @@ public class TransferController {
     @Autowired
     TransactionServiceInterface transactionServiceI;
 
-//    @Autowired
-//    ConnectionServiceInterface connectionServiceI;
+    @Autowired
+    ConnectionServiceInterface connectionServiceI;
 
     @Autowired
     AccountServiceInterface accountServiceI;
@@ -69,20 +71,20 @@ public class TransferController {
         return "transfer";
     }
 
-//    /**
-//     * Form to add connection
-//     * @param userConnectionDto
-//     * @return
-//     */
-//    @PostMapping("/connection")
-//    public String addConnection(@ModelAttribute("user") UserConnectionDto userConnectionDto) {
-//        if (userServiceI.existsUserByEmail(userConnectionDto.getEmail())) {
-//            connectionServiceI.add(userConnectionDto);
-//            return "redirect:/transfer?successAddConnection";
-//        } else {
-//            return "redirect:/transfer?errorAddConnection";
-//        }
-//    }
+    /**
+     * Form to add connection
+     * @param userConnectionDto
+     * @return
+     */
+    @PostMapping("/connection")
+    public String addConnection(@ModelAttribute("user") UserConnectionDto userConnectionDto) {
+        if (userServiceI.existsUserByEmail(userConnectionDto.getEmail())) {
+            connectionServiceI.add(userConnectionDto);
+            return "redirect:/transfer?successAddConnection";
+        } else {
+            return "redirect:/transfer?errorAddConnection";
+        }
+    }
 
     /**
      * Form transfer

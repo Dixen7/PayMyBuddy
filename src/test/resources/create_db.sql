@@ -1,9 +1,9 @@
-USE pay_my_buddy_test;
+USE pay_my_buddy;
 
 -- -----------------------------------------------------
 -- Table `pay_my_buddy_test`.`bank_account`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS pay_my_buddy_test.bank_account (
+CREATE TABLE IF NOT EXISTS pay_my_buddy.bank_account (
     bank_account_id 	BIGINT NOT NULL 	AUTO_INCREMENT,
     account_number 	    VARCHAR(11) NULL 	DEFAULT NULL,
     bic 				VARCHAR(11) NULL 	DEFAULT NULL,
@@ -13,9 +13,9 @@ CREATE TABLE IF NOT EXISTS pay_my_buddy_test.bank_account (
 
 
 -- -----------------------------------------------------
--- Table `pay_my_buddy`.`user_buddy`
+-- Table `pay_my_buddy`.`user`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS pay_my_buddy_test.user (
+CREATE TABLE IF NOT EXISTS pay_my_buddy.user (
     user_id         BIGINT                  NOT NULL AUTO_INCREMENT,
     active          BIT(1)                  NOT NULL,
     email 			VARCHAR(254)            NOT NULL,
@@ -31,32 +31,32 @@ CREATE TABLE IF NOT EXISTS pay_my_buddy_test.user (
 -- -----------------------------------------------------
 -- Table `pay_my_buddy`.`account`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS pay_my_buddy_test.account (
+CREATE TABLE IF NOT EXISTS pay_my_buddy.account (
     account_id  	BIGINT NOT NULL 	AUTO_INCREMENT,
     balance 		DECIMAL(19,2) NULL 	DEFAULT NULL,
     user_id 		BIGINT NULL		 	DEFAULT NULL,
     PRIMARY KEY (account_id),
     FOREIGN KEY (user_id)
-    REFERENCES pay_my_buddy_test.user (user_id));
+    REFERENCES pay_my_buddy.user (user_id));
 
 
 -- -----------------------------------------------------
 -- Table `pay_my_buddy`.`connexion`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS pay_my_buddy_test.connexion (
+CREATE TABLE IF NOT EXISTS pay_my_buddy.connexion (
     user_id 			BIGINT NOT NULL,
     user_associate_id   BIGINT NOT NULL,
     PRIMARY KEY (user_id, user_associate_id),
     FOREIGN KEY (user_associate_id)
     REFERENCES pay_my_buddy_test.user (user_id),
     FOREIGN KEY (user_id)
-    REFERENCES pay_my_buddy_test.user (user_id));
+    REFERENCES pay_my_buddy.user (user_id));
 
 
 -- -----------------------------------------------------
 -- Table `pay_my_buddy`.`role`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS pay_my_buddy_test.role (
+CREATE TABLE IF NOT EXISTS pay_my_buddy.role (
     role_id 	BIGINT NOT NULL 	AUTO_INCREMENT,
     name 		VARCHAR(255) NULL 	DEFAULT NULL,
     PRIMARY KEY (role_id));
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS pay_my_buddy_test.role (
 -- -----------------------------------------------------
 -- Table `pay_my_buddy`.`transaction`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS pay_my_buddy_test.transaction (
+CREATE TABLE IF NOT EXISTS pay_my_buddy.transaction (
     transaction_id 			    BIGINT NOT NULL 	AUTO_INCREMENT,
     amount 					    DECIMAL(19,2) NULL 	DEFAULT NULL,
     date_transaction 			DATE NULL 			DEFAULT NULL,
@@ -76,15 +76,15 @@ CREATE TABLE IF NOT EXISTS pay_my_buddy_test.transaction (
     account_sender_id 		    BIGINT NULL 		DEFAULT NULL,
     PRIMARY KEY (transaction_id),
     FOREIGN KEY (account_beneficiary_id)
-    REFERENCES pay_my_buddy_test.account (user_id),
+    REFERENCES pay_my_buddy.account (user_id),
     FOREIGN KEY (account_sender_id)
-    REFERENCES pay_my_buddy_test.account (user_id));
+    REFERENCES pay_my_buddy.account (user_id));
 
 
 -- -----------------------------------------------------
 -- Table `pay_my_buddy`.`users_roles`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS pay_my_buddy_test.users_roles (
+CREATE TABLE IF NOT EXISTS pay_my_buddy.users_roles (
     user_id 	BIGINT 	NOT NULL,
     role_id 	BIGINT 	NOT NULL,
     PRIMARY KEY(user_id, role_id));

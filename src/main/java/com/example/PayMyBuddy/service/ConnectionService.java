@@ -1,7 +1,7 @@
 package com.example.PayMyBuddy.service;
 
-import com.example.PayMyBuddy.model.Dto.UserConnectionDto;
 import com.example.PayMyBuddy.model.User;
+import com.example.PayMyBuddy.model.dto.UserConnectionDto;
 import com.example.PayMyBuddy.repository.UserRepository;
 import com.example.PayMyBuddy.service.Interface.ConnectionServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;

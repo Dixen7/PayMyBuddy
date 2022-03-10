@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,13 +11,13 @@
           integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
           crossorigin="anonymous">
 
+    <link href=signin.css rel="stylesheet">
 
-    <title>Home</title>
+    <title>Profile</title>
 
     <style>
         body {
             padding-top: 50px;
-            padding-bottom: 50px;
         }
 
         .special {
@@ -27,16 +26,16 @@
     </style>
 </head>
 <body>
-<!-- Navigation menu -->
+
 <nav class="navbar navbar-expand ">
     <div class="container-fluid">
         <button class="btndisabled btn btn-success center-block disabled">Pay
             my buddy</button>
         <div>
             <ul class="nav navbar-right">
-                <li class="nav-item"><a class="nav-link active" href="home">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="home">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="transfer">Transfer</a></li>
-                <li class="nav-item"><a class="nav-link" href="profile">Profile</a></li>
+                <li class="nav-item"><a class="nav-link active" href="profile">Profile</a></li>
                 <li class="nav-item"><a class="nav-link" href="contact">Contact</a></li>
                 <li class="nav-item" sec:authorize="isAuthenticated()"><form
                         th:action="@{/logout}" method="post">
@@ -49,20 +48,40 @@
 </nav>
 <nav class="nav navbar-left bg-light">
     <ul class="nav navbar-right">
-        <li class="nav-item"><a class="nav-link active" href="home">Home
-            /</a></li>
+        <li class="nav-item"><a class="nav-link" href="home">Home /</a></li>
+        <li class="nav-item"><a class="nav-link active" href="profile">Contact</a></li>
     </ul>
 </nav>
-<!-- End Navigation menu -->
 <div class="container px-4">
-
     <div class="row mt-3 mb-1 justify-content-between">
         <div class="ml-4">
-            <span class="text-left"><h4>Your Account</h4></span>
+            <span class="text-left"><h4>Contact</h4></span>
+        </div>
+        <div class="mr-4">
+            <form th:action="@{/unsuscribe}" method="get">
+                <button class="btn btn-primary ">Unsuscribe</button>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="row justify-content-center">
+        <div class=" col-md-12 col-md-offset-3">
+
+            <div class="card bg-light mb-3 ">
+                <div class="card-header"></div>
+                <div class="card-body text-center">
+                    <button class="btndisabled btn btn-success center-block disabled">Pay
+                        my buddy</button>
+                    <br></br>
+                    <h1>Coming Soon ...</h1>
+                    <br></br>
+                </div>
+
+            </div>
         </div>
     </div>
 </div>
-
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

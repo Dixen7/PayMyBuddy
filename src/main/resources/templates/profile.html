@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+          crossorigin="anonymous">
+
+    <title>Profile</title>
+
+    <style>
+        body {
+            padding-top: 50px;
+        }
+
+        .special {
+            padding-top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand ">
+    <div class="container-fluid">
+        <button class="btndisabled btn btn-success center-block disabled">Pay
+            my buddy</button>
+        <div>
+            <ul class="nav navbar-right">
+                <li class="nav-item"><a class="nav-link" href="home">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="transfer">Transfer</a></li>
+                <li class="nav-item"><a class="nav-link active" href="profile">Profile</a></li>
+                <li class="nav-item"><a class="nav-link" href="contact">Contact</a></li>
+                <li class="nav-item" sec:authorize="isAuthenticated()"><form
+                        th:action="@{/logout}" method="post">
+                    <input class="nav-link btn btn-primary" type="submit"
+                           value="Log Out" />
+                </form></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<nav class="nav navbar-left bg-light">
+    <ul class="nav navbar-right">
+        <li class="nav-item"><a class="nav-link" href="home">Home /</a></li>
+        <li class="nav-item"><a class="nav-link active" href="profile">Profile</a></li>
+    </ul>
+</nav>
+<div class="container px-4">
+    <div class="row mt-3 mb-1 justify-content-between">
+        <div class="ml-4">
+            <span class="text-left"><h4>Your Profile</h4></span>
+        </div>
+        <div class="mr-4">
+            <form th:action="@{/unsuscribe}" method="get">
+                <button class="btn btn-primary ">Unsuscribe</button>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="row justify-content-center">
+        <div class=" col-md-12 col-md-offset-3">
+
+            <div class="card bg-light mb-3 ">
+                <div class="card-header"></div>
+                <div class="card-body text-center">
+                    <button class="btndisabled btn btn-success center-block disabled">Pay
+                        my buddy</button>
+
+                    <!-- Profile form -->
+
+                    <form th:action="@{/profile/update}" method="POST"
+                          th:object="${user}">
+
+                        <!-- success message -->
+                        <div th:if="${param.successUpdate}" class="mt-1">
+                            <div class="alert alert-info">You've successfully update
+                                your profile !</div>
+                        </div>
+
+                        <!-- User Email/username -->
+
+                        <label for="email"></label> <input class="form-control d-none"
+                                                           type="text" id="email" name="email" th:field="*{email}">
+                        <!-- Fin de l'essai -->
+
+
+                        <!-- fin Email/username -->
+
+                        <div class="form-group">
+                            <label for="lastName">Last Name :</label> <input type="text"
+                                                                             maxlength="25" class="form-control" id="lastName"
+                                                                             name="lastName" placeholder="LastName" th:field="*{LastName}"
+                                                                             required autofocus="autofocus" />
+
+                        </div>
+
+                        <!-- User firstName -->
+
+                        <div class="form-group">
+                            <label for="firstName">First Name :</label> <input type="text"
+                                                                               maxlength="25" class="form-control" id="firstName"
+                                                                               name="firstName" placeholder="firstName"
+                                                                               th:field="*{firstName}" required autofocus="autofocus" />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Update</button>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+<script
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+</body>
+</html>

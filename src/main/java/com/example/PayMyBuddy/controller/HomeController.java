@@ -12,6 +12,7 @@ import com.example.PayMyBuddy.service.Interface.AccountServiceInterface;
 import com.example.PayMyBuddy.service.Interface.BankAccountServiceInterface;
 import com.example.PayMyBuddy.service.Interface.TransactionServiceInterface;
 import com.example.PayMyBuddy.service.Interface.UserServiceInterface;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -103,9 +104,11 @@ public class HomeController {
         if (transactionDto.getAmount().compareTo(BigDecimal.ZERO) > 0) {
             transactionDto.setSenderId(account);
             String reponse = transactionServiceI.save(transactionDto);
+
             if (reponse == "success") {
                 log.info("Success payment, home page post transfer");
                 return "redirect:/home?successPayment";
+
             } else if (reponse == "errorNotEnoughMoney") {
                 log.error("error not enough money, home page post transfer");
                 return "redirect:/home?errorNotEnoughMoney";

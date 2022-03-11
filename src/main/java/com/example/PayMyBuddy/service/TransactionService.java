@@ -9,6 +9,7 @@ import com.example.PayMyBuddy.model.User;
 import com.example.PayMyBuddy.repository.AccountRepository;
 import com.example.PayMyBuddy.repository.TransactionRepository;
 import com.example.PayMyBuddy.service.Interface.AccountServiceInterface;
+import com.example.PayMyBuddy.service.Interface.BankPaymentInterface;
 import com.example.PayMyBuddy.service.Interface.TransactionServiceInterface;
 import com.example.PayMyBuddy.service.Interface.UserServiceInterface;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,9 @@ public class TransactionService implements TransactionServiceInterface {
 
     @Autowired
     AccountServiceInterface accountServiceI;
+
+    @Autowired
+    BankPaymentInterface bankPaymentI;
 
     @Autowired
     AccountRepository accountRepository;
@@ -73,10 +77,8 @@ public class TransactionService implements TransactionServiceInterface {
             // update beneficiary account
             transactionPayment.setBeneficiaryId(accountB);
 
-            transactionPayment.setFee(transactionDto
-                    .getAmount()
-                    .multiply(new BigDecimal(TransactionConstant.FEE))
-                    .setScale(2, RoundingMode.HALF_UP));
+            transactionPayment
+                    .setFee(transactionDto.getAmount().multiply(new BigDecimal(TransactionConstant.FEE)).setScale(2, RoundingMode.HALF_UP));
             log.debug("frais : " + transactionPayment.getFee());
 
             // verify amount and balance account before doing the transaction
@@ -95,26 +97,37 @@ public class TransactionService implements TransactionServiceInterface {
             transactionPayment.setBeneficiaryId(account);
             transactionPayment.setFee(new BigDecimal("0"));
         }
-        
-        transactionRepository.save(transactionPayment);
-        // update account balance for withdraw, payment and between user
-        Account accountToUpdate = accountRepository.getOne(account.getAccountId());
-        // for withdraw
-        if (transactionPayment.getDescription().equalsIgnoreCase("withdraw")) {
-            accountToUpdate.setBalance(account.getBalance().subtract(transactionPayment.getAmount()));
-            // for payment
-        } else if (transactionPayment.getDescription().equalsIgnoreCase("payment")) {
-            accountToUpdate.setBalance(account.getBalance().add(transactionPayment.getAmount()));
-            // for transfer between account user
+
+        // TODO send requestAuthorization just for type with bank account and send money
+        // to admin bank
+        // bankPayment is an interface before real implementation link with bank of
+        // users and admin webApp, just return true for now
+        if (bankPaymentI.requestAuthorization(transactionPayment)) {
+
+            // if bank return true save transaction else return error
+            transactionRepository.save(transactionPayment);
+
+            // update account balance for withdraw, payment and between user
+            Account accountToUpdate = accountRepository.getOne(account.getAccountId());
+            // for withdraw
+            if (transactionPayment.getDescription().equalsIgnoreCase("withdraw")) {
+                accountToUpdate.setBalance(account.getBalance().subtract(transactionPayment.getAmount()));
+                // for payment
+            } else if (transactionPayment.getDescription().equalsIgnoreCase("payment")) {
+                accountToUpdate.setBalance(account.getBalance().add(transactionPayment.getAmount()));
+                // for transfer between account user
+            } else {
+                accountToUpdate.setBalance(account.getBalance().subtract(transactionPayment.getAmount()));
+                accountToUpdate.setBalance(account.getBalance().subtract(transactionPayment.getFee()));
+                Account accountBeneficiary = accountRepository.getOne(accountB.getAccountId());
+                accountBeneficiary.setBalance(accountB.getBalance().add(transactionPayment.getAmount()));
+                accountRepository.save(accountBeneficiary);
+            }
+            accountRepository.save(accountToUpdate);
+            return "success";
         } else {
-            accountToUpdate.setBalance(account.getBalance().subtract(transactionPayment.getAmount()));
-            accountToUpdate.setBalance(account.getBalance().subtract(transactionPayment.getFee()));
-            Account accountBeneficiary = accountRepository.getOne(accountB.getAccountId());
-            accountBeneficiary.setBalance(accountB.getBalance().add(transactionPayment.getAmount()));
-            accountRepository.save(accountBeneficiary);
+            return "error";
         }
-        accountRepository.save(accountToUpdate);
-        return "success";
     }
 
     @Override

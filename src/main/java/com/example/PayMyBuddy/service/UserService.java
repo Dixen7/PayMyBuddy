@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -29,7 +30,7 @@ public class UserService implements UserServiceInterface {
     private UserRepository userRepository;
 
     @Autowired
-    private AccountServiceInterface accountServiceInterface;
+    private AccountServiceInterface accountServiceI;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -40,12 +41,14 @@ public class UserService implements UserServiceInterface {
      * @return userBuddy
      */
     @Override
+    @Transactional
     public User register(UserRegistrationDto userRegistrationDto) {
 
         User userSet = userSet(userRegistrationDto);
-        User user = userRepository.save(userSet);
-        accountServiceInterface.save(user);
-        return user;
+        User userBuddy = userRepository.save(userSet);
+        accountServiceI.save(userBuddy);
+
+        return userBuddy;
     }
 
     /**
@@ -58,6 +61,7 @@ public class UserService implements UserServiceInterface {
 
         user.setEmail(userRegistrationDto.getEmail());
         user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
+        // TODO this to add an admin account, have to remove after create
         if(userRegistrationDto.getEmail().equalsIgnoreCase("admin@paymybuddy.com")) {
             user.setRoles(Arrays.asList(new Role("ROLE_ADMIN")));
         }else {
@@ -88,6 +92,7 @@ public class UserService implements UserServiceInterface {
     @Override
     public User save(UserProfileDto userDto) {
         User user = new User();
+
         user = userRepository.findByEmail(userDto.getEmail());
         // get the user with getOne() method fr update in database
         User userToUpdate = userRepository.getOne(user.getId());
@@ -97,33 +102,31 @@ public class UserService implements UserServiceInterface {
         userToUpdate.setLastName(userDto.getLastName());
         userToUpdate.setFirstName(userDto.getFirstName());
 
-        User userBuddy = userRepository.save(userToUpdate);
+        User userSave = userRepository.save(userToUpdate);
 
-        return userBuddy;
+        return userSave;
     }
 
     /**
-     * Service for unsubscribe user and set inactive profile
-     * @param userDto
+     * Service for unsuscribe user and set inactive profile
      * @return
      */
     @Override
     public User unsubscribe(UserDto userDto) {
         User user = new User();
+
         user = userRepository.findByEmail(userDto.getEmail());
-
-        Account account = accountServiceInterface.findByUserAccountId(user);
-
+        Account account = accountServiceI.findByUserAccountId(user);
         if(!account.getBalance().equals(new BigDecimal("0.00")) ){
             return null;
         }
-
         User userToUpdate = userRepository.getOne(user.getId());
         // set inactive
         userToUpdate.setActive(false);
-        User userBuddy =  userRepository.save(userToUpdate);
-        log.debug("user inactive: " + userBuddy);
-        return userBuddy;
+
+        User userSave =  userRepository.save(userToUpdate);
+        log.debug("user inactive: " + userSave);
+        return userSave;
     }
 
 }

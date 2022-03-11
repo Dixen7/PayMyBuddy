@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html
+<html xmlns="http://www.w3.org/1999/xhml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
@@ -11,6 +11,9 @@
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
           integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
           crossorigin="anonymous">
+
+    <link href=signin.css rel="stylesheet">
+    <link href=home.css rel="stylesheet">
 
 
     <title>Admin page</title>
@@ -75,7 +78,8 @@
 
                     <!-- Account Balance -->
                     <h4>Balance :</h4>
-                    <div class="card mx-auto" style="width: 18rem; "th:text="${account.balance}"></div>
+                    <div class="card mx-auto" style="width: 18rem;"
+                         th:text="${account.balance}"></div>
                     <div>€</div>
                     <!-- success message -->
                     <div th:if="${param.successPayment}" class="mt-1">
@@ -143,10 +147,10 @@
                                     <form class="form-inline" th:action="@{/home}" method="POST"
                                           th:object="${transaction}">
                                         <div class="mr-2">
-                                            <select class="form-control " required="required" autofocus="autofocus">
+                                            <!--  <select class="form-control " required="required" autofocus="autofocus">
                                                 <option disabled="disabled">choose a bank Account</option>
                                                 <option th:value="${bankAccount.holder}" th:text="${bankAccount.holder}"></option>
-                                            </select>
+                                            </select>-->
                                             <div th:if="${bankAccount == null}">You don't have a
                                                 bank account, please add a bank account</div>
                                         </div>
@@ -162,7 +166,8 @@
                                         <div class="mr-2">
                                             <!-- Button -->
                                             <button type="button" class="btn btn-primary"
-                                                    data-toggle="modal" data-target="#popup">Add bank acount</button>
+                                                    data-toggle="modal" data-target="#popup">Add bank
+                                                acount</button>
                                         </div>
                                     </form>
 

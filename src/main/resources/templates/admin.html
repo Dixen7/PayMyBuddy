@@ -143,10 +143,10 @@
                                     <form class="form-inline" th:action="@{/home}" method="POST"
                                           th:object="${transaction}">
                                         <div class="mr-2">
-                                            <!--  <select class="form-control " required="required" autofocus="autofocus">
+                                            <select class="form-control " required="required" autofocus="autofocus">
                                                 <option disabled="disabled">choose a bank Account</option>
                                                 <option th:value="${bankAccount.holder}" th:text="${bankAccount.holder}"></option>
-                                            </select>-->
+                                            </select>
                                             <div th:if="${bankAccount == null}">You don't have a
                                                 bank account, please add a bank account</div>
                                         </div>

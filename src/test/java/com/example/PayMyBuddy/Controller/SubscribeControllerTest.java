@@ -16,7 +16,6 @@ import com.example.PayMyBuddy.model.User;
 import com.example.PayMyBuddy.service.Interface.UserServiceInterface;
 import com.example.PayMyBuddy.service.RoleService;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -24,13 +23,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
-
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = SecurityConfig.class)
 @WebMvcTest(controllers = SubscribeController.class)
 @Import(SubscribeController.class)
@@ -58,7 +54,7 @@ class SubscribeControllerTest {
 
     @Test
     void testPostNewUserSuccess() throws Exception {
-        // ARRANGE
+
         UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
 
         User user = new User();
@@ -79,7 +75,7 @@ class SubscribeControllerTest {
 
     @Test
     void testPostNewUserIfExist() throws Exception {
-        // ARRANGE
+
         UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
         userRegistrationDto.setEmail("user1@gmail.com");
         userRegistrationDto.setPassword("user");

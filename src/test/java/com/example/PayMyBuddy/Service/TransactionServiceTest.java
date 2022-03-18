@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.math.BigDecimal;
@@ -51,9 +50,6 @@ public class TransactionServiceTest {
 
     @MockBean
     AccountRepository accountRepository;
-
-    @MockBean
-    Authentication authentification;
 
     @Autowired
     TransactionService transactionService;
@@ -89,10 +85,8 @@ public class TransactionServiceTest {
         when(accountRepository.getOne(account.getAccountId())).thenReturn(account);
         when(accountRepository.getOne(accountB.getAccountId())).thenReturn(accountB);
 
-        //ACT
         String reponse = transactionService.save(transac);
 
-        //ASSERT
         assertThat(reponse).isEqualToIgnoringCase("success");
         assertThat(accountB.getBalance()).isEqualTo(new BigDecimal("200"));
         assertThat(account.getBalance()).isEqualTo(new BigDecimal("4.50"));
@@ -129,10 +123,8 @@ public class TransactionServiceTest {
         when(accountRepository.getOne(account.getAccountId())).thenReturn(account);
         when(accountRepository.getOne(accountB.getAccountId())).thenReturn(accountB);
 
-        //ACT
         String reponse = transactionService.save(transac);
 
-        //ASSERT
         assertThat(reponse).isEqualToIgnoringCase("errorNotEnoughMoney");
         assertThat(account.getBalance()).isEqualTo(new BigDecimal("100"));
     }
@@ -214,10 +206,8 @@ public class TransactionServiceTest {
         when(bankPaymentI.requestAuthorization(Mockito.any(Transaction.class))).thenReturn(true);
         when(accountRepository.getOne(account.getAccountId())).thenReturn(account);
 
-        //ACT
         String reponse = transactionService.save(transac);
 
-        //ASSERT
         assertThat(reponse).isEqualToIgnoringCase("errorNotEnoughMoney");
         assertThat(account.getBalance()).isEqualTo(new BigDecimal("100"));
 

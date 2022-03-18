@@ -2,7 +2,6 @@ package com.example.PayMyBuddy.Service;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -24,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 import lombok.extern.slf4j.Slf4j;
@@ -42,9 +40,6 @@ class UserServiceTest {
 
     @MockBean
     AccountService accountServiceInterface;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
 
     @Autowired
     UserService userService;
@@ -66,21 +61,21 @@ class UserServiceTest {
         when(userRepository.save(Mockito.any(User.class))).thenReturn(userSave);
         userService.register(userRegistrationDto);
 
-        verify(userRepository, times(1)).save(Mockito.any(User.class));
-        verify(accountServiceInterface, times(1)).save(Mockito.any(User.class));
+        verify(userRepository).save(Mockito.any(User.class));
+        verify(accountServiceInterface).save(Mockito.any(User.class));
 
     }
 
     @Test
     void testFindAll() {
         userService.findAll();
-        verify(userRepository, times(1)).findAll();
+        verify(userRepository).findAll();
     }
 
     @Test
     void testFindOne() {
         userService.findOne("mail");
-        verify(userRepository, times(1)).findByEmail("mail");
+        verify(userRepository).findByEmail("mail");
     }
 
     @Test
@@ -124,7 +119,7 @@ class UserServiceTest {
     @Test
     void testExistUserByEmail() {
         userService.existsUserByEmail("mail");
-        verify(userRepository, times(1)).existsUserByEmail("mail");
+        verify(userRepository).existsUserByEmail("mail");
     }
 
     @Test

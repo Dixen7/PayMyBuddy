@@ -14,7 +14,6 @@ import com.example.PayMyBuddy.service.Interface.UserServiceInterface;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,7 +23,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -43,7 +41,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = SecurityConfig.class)
 @WebMvcTest(controllers = TransferController.class)
 @Import(TransferController.class)
@@ -84,9 +81,9 @@ class TransferControllerTest {
 
     @Test
     void testTransferNotAutorize() throws Exception {
-        // ARRANGE
+
         Set<User> contacts = new HashSet<>();
-        // ACT AND ASSERT
+
         this.mockMvc.perform(MockMvcRequestBuilders.get("/transfer")
                         .flashAttr("transactions", listTransaction).flashAttr("contacts", contacts))
                 .andExpect(status().isUnauthorized());
@@ -96,7 +93,7 @@ class TransferControllerTest {
     @Test
     @WithMockUser("user@gmail.com")
     void testShouldDisplayTransferPage() throws Exception {
-        // ARRANGE
+
         Set<User> contacts = new HashSet<>();
         User user = new User();
         user.setEmail("user@gmail.com");
@@ -115,7 +112,6 @@ class TransferControllerTest {
         when(transactionServiceI.findAllBySenderIdAndType(account, Type.USER_TO_USER))
                 .thenReturn(listTransaction);
 
-        // ACT AND ASSERT
         this.mockMvc.perform(MockMvcRequestBuilders.get("/transfer").flashAttr("user", user)
                         .flashAttr("transactions", listTransaction).flashAttr("contacts", contacts))
                 .andExpect(status().isOk()).andExpect(content().string(containsString("transfer")));
@@ -125,7 +121,7 @@ class TransferControllerTest {
     @Test
     @WithMockUser("user@gmail.com")
     void testPostTransferSuccess() throws Exception {
-        // ARRANGE
+
         Set<User> contacts = new HashSet<>();
         User user = new User();
         user.setEmail("user@gmail.com");
@@ -151,7 +147,6 @@ class TransferControllerTest {
         when(accountServiceI.findByUserAccountId(user)).thenReturn(account);
         when(transactionServiceI.save(Mockito.any(TransactionDto.class))).thenReturn("success");
 
-        // ACT AND ASSERT
         this.mockMvc
                 .perform(post("/transfer/transfer").param("amount", transactionDto.getAmount().toString()))
                 .andExpect(redirectedUrl("/transfer?successPayment"));
@@ -161,7 +156,7 @@ class TransferControllerTest {
     @Test
     @WithMockUser("user@gmail.com")
     void testPostTransferNotEnoughMoney() throws Exception {
-        // ARRANGE
+
         Set<User> contacts = new HashSet<>();
         User user = new User();
         user.setEmail("user@gmail.com");
@@ -188,7 +183,6 @@ class TransferControllerTest {
         when(transactionServiceI.save(Mockito.any(TransactionDto.class)))
                 .thenReturn("errorNotEnoughMoney");
 
-        // ACT AND ASSERT
         this.mockMvc
                 .perform(post("/transfer/transfer").param("amount", transactionDto.getAmount().toString()))
                 .andExpect(redirectedUrl("/transfer?errorNotEnoughMoney"));
@@ -198,7 +192,7 @@ class TransferControllerTest {
     @Test
     @WithMockUser("user@gmail.com")
     void testPostTransferErrorInactive() throws Exception {
-        // ARRANGE
+
         Set<User> contacts = new HashSet<>();
         User user = new User();
         user.setEmail("user@gmail.com");
@@ -224,7 +218,6 @@ class TransferControllerTest {
         when(accountServiceI.findByUserAccountId(user)).thenReturn(account);
         when(transactionServiceI.save(Mockito.any(TransactionDto.class))).thenReturn("inactive");
 
-        // ACT AND ASSERT
         this.mockMvc
                 .perform(post("/transfer/transfer").param("amount", transactionDto.getAmount().toString()))
                 .andExpect(redirectedUrl("/transfer?errorInactive"));
@@ -234,7 +227,7 @@ class TransferControllerTest {
     @Test
     @WithMockUser("user@gmail.com")
     void testPostTransferErrorZero() throws Exception {
-        // ARRANGE
+
         Set<User> contacts = new HashSet<>();
         User user = new User();
         user.setEmail("user@gmail.com");
@@ -259,7 +252,6 @@ class TransferControllerTest {
         when(userServiceI.findOne("user@gmail.com")).thenReturn(user);
         when(accountServiceI.findByUserAccountId(user)).thenReturn(account);
 
-        // ACT AND ASSERT
         this.mockMvc
                 .perform(post("/transfer/transfer").param("amount", transactionDto.getAmount().toString()))
                 .andExpect(redirectedUrl("/transfer?errorZero"));

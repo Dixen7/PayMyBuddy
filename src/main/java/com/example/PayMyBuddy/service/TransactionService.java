@@ -79,7 +79,7 @@ public class TransactionService implements TransactionServiceInterface {
 
             transactionPayment
                     .setFee(transactionDto.getAmount().multiply(new BigDecimal(TransactionConstant.FEE)).setScale(2, RoundingMode.HALF_UP));
-            log.debug("frais : " + transactionPayment.getFee());
+            log.debug("---------------- frais : " + transactionPayment.getFee());
 
             // verify amount and balance account before doing the transaction
             if (transactionDto.getType().equals(Type.USER_TO_USER) && account.getBalance()
@@ -98,7 +98,7 @@ public class TransactionService implements TransactionServiceInterface {
             transactionPayment.setFee(new BigDecimal("0"));
         }
 
-        // TODO send requestAuthorization just for type with bank account and send money
+        // send requestAuthorization just for type with bank account and send money
         // to admin bank
         // bankPayment is an interface before real implementation link with bank of
         // users and admin webApp, just return true for now

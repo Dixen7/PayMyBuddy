@@ -10,6 +10,7 @@ public class LoginController {
 
     @GetMapping("/login")
     public String login() {
+        log.info("Request get /login called");
         return "login";
     }
 

@@ -33,16 +33,16 @@ import lombok.extern.slf4j.Slf4j;
 public class HomeController {
 
     @Autowired
-    UserServiceInterface userServiceI;
+    UserServiceInterface userServiceInterface;
 
     @Autowired
-    TransactionServiceInterface transactionServiceI;
+    TransactionServiceInterface transactionServiceInterface;
 
     @Autowired
-    BankAccountServiceInterface bankAccountServiceI;
+    BankAccountServiceInterface bankAccountServiceInterface;
 
     @Autowired
-    AccountServiceInterface accountServiceI;
+    AccountServiceInterface accountServiceInterface;
 
     @ModelAttribute("bankAccountadd")
     public BankAccountDto bankAccountDto() {
@@ -65,19 +65,16 @@ public class HomeController {
     public String home(Model model) {
         log.info("Request get /home called");
 
-        // Get the user authenticate, need to find this account, info....
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
 
-        User user = userServiceI.findOne(username);
-        Account account = accountServiceI.findByUserAccountId(user);
+        User user = userServiceInterface.findOne(username);
+        Account account = accountServiceInterface.findByUserAccountId(user);
         BankAccount bankAccount = user.getBankAccount();
 
-        // Serve user information to view
         model.addAttribute("account", account);
         model.addAttribute("bankAccount", bankAccount);
 
-        // Return home page or admin page according to role
         Collection<Role> roles = user.getRoles();
         if (roles.toString().contains("ROLE_ADMIN")) {
             return "admin";
@@ -94,16 +91,14 @@ public class HomeController {
     @PostMapping
     public String transfer(@ModelAttribute("transaction") TransactionDto transactionDto) throws Exception {
 
-        // recovery identity user connected, the entity and this account
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        User user = userServiceI.findOne(username);
-        Account account = accountServiceI.findByUserAccountId(user);
+        User user = userServiceInterface.findOne(username);
+        Account account = accountServiceInterface.findByUserAccountId(user);
 
-        // Verify amount > 0
         if (transactionDto.getAmount().compareTo(BigDecimal.ZERO) > 0) {
             transactionDto.setSenderId(account);
-            String reponse = transactionServiceI.save(transactionDto);
+            String reponse = transactionServiceInterface.save(transactionDto);
 
             if (reponse == "success") {
                 log.info("Success payment, home page post transfer");
@@ -131,10 +126,7 @@ public class HomeController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         bankAccountDto.setEmail(username);
-
-        bankAccountServiceI.save(bankAccountDto);
-
+        bankAccountServiceInterface.save(bankAccountDto);
         return "redirect:/home?successAddBankAccount";
-
     }
 }

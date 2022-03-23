@@ -4,6 +4,7 @@ package com.example.PayMyBuddy.controller;
 import com.example.PayMyBuddy.model.User;
 import com.example.PayMyBuddy.model.dto.UserProfileDto;
 import com.example.PayMyBuddy.service.Interface.UserServiceInterface;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,10 +21,11 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/profile")
+@Slf4j
 public class ProfileController implements WebMvcConfigurer {
 
     @Autowired
-    UserServiceInterface userServiceI;
+    UserServiceInterface userServiceInterface;
 
     @ModelAttribute("user")
     public UserProfileDto userProfilDto() {
@@ -36,10 +38,10 @@ public class ProfileController implements WebMvcConfigurer {
      */
     @GetMapping
     public String profile(Model model) {
-
+        log.info("Request get /profile called");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        User user = userServiceI.findOne(username);
+        User user = userServiceInterface.findOne(username);
         model.addAttribute("user", user);
         return "profile";
     }
@@ -56,7 +58,7 @@ public class ProfileController implements WebMvcConfigurer {
         if (bindingResult.hasErrors()) {
             return "profile";
         }
-        userServiceI.save(userDto);
+        userServiceInterface.save(userDto);
         return "redirect:/profile?success";
     }
 

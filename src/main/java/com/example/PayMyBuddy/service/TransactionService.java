@@ -24,18 +24,17 @@ import java.time.LocalDate;
 @Slf4j
 public class TransactionService implements TransactionServiceInterface {
 
-
     private TransactionRepository transactionRepository;
-    private UserServiceInterface userServiceI;
-    private AccountServiceInterface accountServiceI;
-    private BankPaymentInterface bankPaymentI;
+    private UserServiceInterface userServiceInterface;
+    private AccountServiceInterface accountServiceInterface;
+    private BankPaymentInterface bankPaymentInterface;
     private AccountRepository accountRepository;
 
-    public TransactionService(TransactionRepository transactionRepository, UserServiceInterface userServiceI, AccountServiceInterface accountServiceI, BankPaymentInterface bankPaymentI, AccountRepository accountRepository) {
+    public TransactionService(TransactionRepository transactionRepository, UserServiceInterface userServiceInterface, AccountServiceInterface accountServiceInterface, BankPaymentInterface bankPaymentInterface, AccountRepository accountRepository) {
         this.transactionRepository = transactionRepository;
-        this.userServiceI = userServiceI;
-        this.accountServiceI = accountServiceI;
-        this.bankPaymentI = bankPaymentI;
+        this.userServiceInterface = userServiceInterface;
+        this.accountServiceInterface = accountServiceInterface;
+        this.bankPaymentInterface = bankPaymentInterface;
         this.accountRepository = accountRepository;
     }
 
@@ -60,16 +59,16 @@ public class TransactionService implements TransactionServiceInterface {
         if (transactionDto.getType() == Type.USER_TO_USER) {
 
             String email = transactionDto.getMailBeneficiary();
-            User userB = userServiceI.findOne(email);
+            User userB = userServiceInterface.findOne(email);
 
             if(!userB.isActive()) {
                 return "inactive";
             }
-            accountB = accountServiceI.findByUserAccountId(userB);
+            accountB = accountServiceInterface.findByUserAccountId(userB);
 
             transactionPayment.setBeneficiaryId(accountB);
             transactionPayment.setFee(transactionDto.getAmount().multiply(new BigDecimal(TransactionConstant.FEE)).setScale(2, RoundingMode.HALF_UP));
-            log.debug("---------------- frais : " + transactionPayment.getFee());
+            log.debug("frais : " + transactionPayment.getFee());
 
             if (transactionDto.getType().equals(Type.USER_TO_USER) && account.getBalance().compareTo(transactionDto.getAmount().add(transactionPayment.getFee())) < 0) {
                 return "errorNotEnoughMoney";
@@ -85,7 +84,7 @@ public class TransactionService implements TransactionServiceInterface {
             transactionPayment.setFee(new BigDecimal("0"));
         }
 
-        if (bankPaymentI.requestAuthorization(transactionPayment)) {
+        if (bankPaymentInterface.requestAuthorization(transactionPayment)) {
 
             transactionRepository.save(transactionPayment);
 

@@ -27,16 +27,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService implements UserServiceInterface {
 
     private UserRepository userRepository;
-    private AccountServiceInterface accountServiceI;
+    private AccountServiceInterface accountServiceInterface;
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, AccountServiceInterface accountServiceI, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, AccountServiceInterface accountServiceInterface, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.accountServiceI = accountServiceI;
+        this.accountServiceInterface = accountServiceInterface;
         this.passwordEncoder = passwordEncoder;
     }
-
 
     /**
      * Service for registration new user
@@ -49,7 +48,7 @@ public class UserService implements UserServiceInterface {
 
         User userSet = userSet(userRegistrationDto);
         User userBuddy = userRepository.save(userSet);
-        accountServiceI.save(userBuddy);
+        accountServiceInterface.save(userBuddy);
 
         return userBuddy;
     }
@@ -61,15 +60,16 @@ public class UserService implements UserServiceInterface {
      */
     public User userSet(UserRegistrationDto userRegistrationDto) {
         User user = new User();
-
         user.setEmail(userRegistrationDto.getEmail());
         user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
-        // TODO this to add an admin account, have to remove after create
+
         if(userRegistrationDto.getEmail().equalsIgnoreCase("admin@paymybuddy.com")) {
             user.setRoles(Arrays.asList(new Role("ROLE_ADMIN")));
-        }else {
+
+        } else {
             user.setRoles(Arrays.asList(new Role("ROLE_USER")));
         }
+
         return user;
     }
 
@@ -95,16 +95,11 @@ public class UserService implements UserServiceInterface {
     @Override
     public User save(UserProfileDto userDto) {
         User user = new User();
-
         user = userRepository.findByEmail(userDto.getEmail());
-        // get the user with getOne() method fr update in database
         User userToUpdate = userRepository.getOne(user.getId());
         log.debug("userToUpdate : " + userToUpdate);
-
-        // set the user profile
         userToUpdate.setLastName(userDto.getLastName());
         userToUpdate.setFirstName(userDto.getFirstName());
-
         User userSave = userRepository.save(userToUpdate);
 
         return userSave;
@@ -117,18 +112,17 @@ public class UserService implements UserServiceInterface {
     @Override
     public User unsubscribe(UserDto userDto) {
         User user = new User();
-
         user = userRepository.findByEmail(userDto.getEmail());
-        Account account = accountServiceI.findByUserAccountId(user);
+        Account account = accountServiceInterface.findByUserAccountId(user);
+
         if(!account.getBalance().equals(new BigDecimal("0.00")) ){
             return null;
         }
         User userToUpdate = userRepository.getOne(user.getId());
-        // set inactive
         userToUpdate.setActive(false);
-
         User userSave =  userRepository.save(userToUpdate);
         log.debug("user inactive: " + userSave);
+
         return userSave;
     }
 

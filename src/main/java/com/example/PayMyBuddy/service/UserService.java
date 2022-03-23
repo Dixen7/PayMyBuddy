@@ -26,14 +26,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class UserService implements UserServiceInterface {
 
-    @Autowired
     private UserRepository userRepository;
-
-    @Autowired
     private AccountServiceInterface accountServiceI;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    public UserService(UserRepository userRepository, AccountServiceInterface accountServiceI, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.accountServiceI = accountServiceI;
+        this.passwordEncoder = passwordEncoder;
+    }
+
 
     /**
      * Service for registration new user

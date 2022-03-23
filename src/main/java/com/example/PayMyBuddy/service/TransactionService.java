@@ -13,7 +13,6 @@ import com.example.PayMyBuddy.service.Interface.BankPaymentInterface;
 import com.example.PayMyBuddy.service.Interface.TransactionServiceInterface;
 import com.example.PayMyBuddy.service.Interface.UserServiceInterface;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,20 +24,20 @@ import java.time.LocalDate;
 @Slf4j
 public class TransactionService implements TransactionServiceInterface {
 
-    @Autowired
-    TransactionRepository transactionRepository;
 
-    @Autowired
-    UserServiceInterface userServiceI;
+    private TransactionRepository transactionRepository;
+    private UserServiceInterface userServiceI;
+    private AccountServiceInterface accountServiceI;
+    private BankPaymentInterface bankPaymentI;
+    private AccountRepository accountRepository;
 
-    @Autowired
-    AccountServiceInterface accountServiceI;
-
-    @Autowired
-    BankPaymentInterface bankPaymentI;
-
-    @Autowired
-    AccountRepository accountRepository;
+    public TransactionService(TransactionRepository transactionRepository, UserServiceInterface userServiceI, AccountServiceInterface accountServiceI, BankPaymentInterface bankPaymentI, AccountRepository accountRepository) {
+        this.transactionRepository = transactionRepository;
+        this.userServiceI = userServiceI;
+        this.accountServiceI = accountServiceI;
+        this.bankPaymentI = bankPaymentI;
+        this.accountRepository = accountRepository;
+    }
 
     @Override
     public Iterable<Transaction> findAllBySenderId(Account account) {

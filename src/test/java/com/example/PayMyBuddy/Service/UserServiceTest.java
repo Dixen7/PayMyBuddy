@@ -15,35 +15,40 @@ import com.example.PayMyBuddy.model.User;
 import com.example.PayMyBuddy.repository.UserRepository;
 import com.example.PayMyBuddy.service.AccountService;
 import com.example.PayMyBuddy.service.UserService;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
-@WebMvcTest(UserService.class)
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
-    @MockBean
+    @Mock
     private UserDetailsService userDetailsService;
 
-    @MockBean
-    UserRepository userRepository;
+    @Mock
+    private static UserRepository userRepository;
 
-    @MockBean
-    AccountService accountServiceInterface;
+    @Mock
+    private static AccountService accountServiceInterface;
 
-    @Autowired
-    UserService userService;
+    @Mock
+    private static PasswordEncoder passwordEncoder;
 
+    private static UserService userService;
+
+    @BeforeAll
+    private static void setup() {
+        userService = new UserService(userRepository, accountServiceInterface, passwordEncoder);
+    }
+
+    
     UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
     User user = new User();
     User userSave = new User();

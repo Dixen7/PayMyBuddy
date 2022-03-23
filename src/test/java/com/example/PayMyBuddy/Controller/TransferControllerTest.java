@@ -44,7 +44,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(classes = SecurityConfig.class)
 @WebMvcTest(controllers = TransferController.class)
 @Import(TransferController.class)
-@Slf4j
 class TransferControllerTest {
 
     @Autowired

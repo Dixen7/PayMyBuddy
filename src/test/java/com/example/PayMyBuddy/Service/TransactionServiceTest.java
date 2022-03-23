@@ -27,7 +27,6 @@ import java.math.BigDecimal;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@Slf4j
 @WebMvcTest(TransactionService.class)
 @ExtendWith(MockitoExtension.class)
 public class TransactionServiceTest {

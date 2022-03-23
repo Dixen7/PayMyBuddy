@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
     Iterable<Transaction> findAllBySenderId(Account account);
-
     Iterable<Transaction> findAllBySenderIdAndType(Account account, Type userToUser);
 
 }

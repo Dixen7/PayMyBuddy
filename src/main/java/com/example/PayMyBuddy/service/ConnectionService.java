@@ -4,7 +4,6 @@ import com.example.PayMyBuddy.model.User;
 import com.example.PayMyBuddy.model.dto.UserConnectionDto;
 import com.example.PayMyBuddy.repository.UserRepository;
 import com.example.PayMyBuddy.service.Interface.ConnectionServiceInterface;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -14,12 +13,12 @@ import java.util.Set;
 @Service
 public class ConnectionService implements ConnectionServiceInterface {
 
-    @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
-    /**
-     * To add contact to userBuddy account
-     */
+    public ConnectionService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     @Override
     public void add(UserConnectionDto userConnectionDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

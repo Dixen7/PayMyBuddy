@@ -5,7 +5,6 @@ import com.example.PayMyBuddy.model.User;
 import com.example.PayMyBuddy.repository.AccountRepository;
 import com.example.PayMyBuddy.service.Interface.AccountServiceInterface;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -14,8 +13,11 @@ import java.math.BigDecimal;
 @Slf4j
 public class AccountService implements AccountServiceInterface {
 
-    @Autowired
-    AccountRepository accountRepository;
+    private AccountRepository accountRepository;
+
+    public AccountService(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
+    }
 
     @Override
     public Account findByUserAccountId(User user) {

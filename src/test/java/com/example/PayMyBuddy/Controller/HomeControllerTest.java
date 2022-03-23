@@ -44,7 +44,6 @@ import lombok.extern.slf4j.Slf4j;
 @ContextConfiguration(classes = SecurityConfig.class)
 @WebMvcTest(controllers = HomeController.class)
 @Import(HomeController.class)
-@Slf4j
 public class HomeControllerTest {
 
     @Autowired

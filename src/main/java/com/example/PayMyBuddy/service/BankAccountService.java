@@ -15,14 +15,15 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class BankAccountService implements BankAccountServiceInterface {
 
-    @Autowired
-    BankAccountRepository bankAccountRepository;
+    private BankAccountRepository bankAccountRepository;
+    private UserServiceInterface userServiceI;
+    private UserRepository userRepository;
 
-    @Autowired
-    UserServiceInterface userBuddyServiceI;
-
-    @Autowired
-    UserRepository userBuddyRepository;
+    public BankAccountService(BankAccountRepository bankAccountRepository, UserServiceInterface userServiceI, UserRepository userRepository) {
+        this.bankAccountRepository = bankAccountRepository;
+        this.userServiceI = userServiceI;
+        this.userRepository = userRepository;
+    }
 
     @Override
     public String save(BankAccountDto bankAccountDto) {
@@ -37,14 +38,14 @@ public class BankAccountService implements BankAccountServiceInterface {
 
         bankAccountRepository.save(bankAccount);
 
-        User user = userBuddyServiceI.findOne(bankAccountDto.getEmail());
+        User user = userServiceI.findOne(bankAccountDto.getEmail());
         Long id = user.getId();
 
         // add bank account to entity user
-        User userToUpdate = userBuddyRepository.getOne(id);
+        User userToUpdate = userRepository.getOne(id);
         log.debug("userToUpdate" + userToUpdate);
         userToUpdate.setBankAccount(bankAccount);
-        userBuddyRepository.save(userToUpdate);
+        userRepository.save(userToUpdate);
         return "success";
     }
 }

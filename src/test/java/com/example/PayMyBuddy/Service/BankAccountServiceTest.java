@@ -20,7 +20,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@Slf4j
 @WebMvcTest(BankAccountService.class)
 @ExtendWith(MockitoExtension.class)
 public class BankAccountServiceTest {

@@ -20,7 +20,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @WebMvcTest(AccountService.class)
 @ExtendWith(MockitoExtension.class)
 class AccountServiceTest {

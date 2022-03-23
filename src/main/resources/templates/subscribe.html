@@ -10,9 +10,9 @@
 	integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
 	crossorigin="anonymous">
 
-<link href=signin.css rel="stylesheet">
+	<link href=signin.css rel="stylesheet">
 
-<title>Suscribe</title>
+	<title>Subscribe</title>
 
 <style>
 body {
@@ -37,7 +37,7 @@ body {
 
 						<!-- Registration form -->
 
-						<form th:action="@{/suscribe}" method="POST" th:object="${user}">
+						<form th:action="@{/subscribe}" method="POST" th:object="${user}">
 
 							<!-- success message -->
 							<div th:if="${param.successRegistration}" class="mt-1">

@@ -11,7 +11,6 @@
           integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
           crossorigin="anonymous">
 
-    <link href=signin.css rel="stylesheet">
 
     <title>Login</title>
 
@@ -68,8 +67,8 @@
                         </div>
 
                         <!-- Logout message -->
-                        <div th:if="${param.unsuscribe}" class="mt-1">
-                            <div class="alert alert-info">You have been unsuscribe.</div>
+                        <div th:if="${param.unsubscribe}" class="mt-1">
+                            <div class="alert alert-info">You have been unsubscribe.</div>
                         </div>
 
 
@@ -80,7 +79,7 @@
                         <!-- submit button -->
                         <button type="submit" class="btn btn-primary" th:text="Login">Login</button>
                         <p>
-                            I don't have an account ? <a class="link" th:href="@{/suscribe}">Register Now !</a>
+                            I don't have an account ? <a class="link" th:href="@{/subscribe}">Register Now !</a>
                         </p>
                     </form>
 

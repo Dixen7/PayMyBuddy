@@ -1,9 +1,7 @@
 package com.example.PayMyBuddy.controller;
 
-
-import com.example.PayMyBuddy.model.Dto.UserRegistrationDto;
+import com.example.PayMyBuddy.model.dto.UserRegistrationDto;
 import com.example.PayMyBuddy.model.User;
-import com.example.PayMyBuddy.service.Interface.RoleServiceInterface;
 import com.example.PayMyBuddy.service.Interface.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,13 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
-@RequestMapping("/suscribe")
+@RequestMapping("/subscribe")
 @Slf4j
-public class SuscribeController {
+public class SubscribeController {
 
+    @Autowired
     UserServiceInterface userServiceInterface;
-
-    RoleServiceInterface roleServiceInterface;
 
     @ModelAttribute("user")
     public UserRegistrationDto userRegistrationDto() {
@@ -31,7 +28,7 @@ public class SuscribeController {
 
     @GetMapping
     public String showRegistrationForm() {
-        return "suscribe";
+        return "subscribe";
     }
 
     @PostMapping
@@ -41,19 +38,18 @@ public class SuscribeController {
         //Verify if user already exist or account inactive
         User user = userServiceInterface.findOne(userRegistrationDto.getEmail());
 
-        if (userServiceInterface.existsUserBuddyByEmail(userRegistrationDto.getEmail())) {
+        if (userServiceInterface.existsUserByEmail(userRegistrationDto.getEmail())) {
             Boolean active = user.isActive();
             if(!active) {
-                return "redirect:/suscribe?inactive";
+                return "redirect:/subscribe?inactive";
             }
-            return "redirect:/suscribe?error";
+            return "redirect:/subscribe?error";
         }
         else {
-            userServiceInterface.save(userRegistrationDto);
-            return "redirect:/suscribe?successRegistration";
+            userServiceInterface.register(userRegistrationDto);
+            return "redirect:/subscribe?successRegistration";
         }
 
     }
-
 
 }

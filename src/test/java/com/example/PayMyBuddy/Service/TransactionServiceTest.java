@@ -44,7 +44,45 @@ public class TransactionServiceTest {
     }
 
     @Test
-    void testTransactionUserToUserInSuccessAccountBalanceAndFeeOk() {
+    public void testTransactionUserToUserWhenRequestAuthorizationIsFalse() throws Exception {
+
+        Account account = new Account();
+        account.setBalance(new BigDecimal("105"));
+        account.setAccountId(1);
+        User user = new User();
+        user.setEmail("user1@gmail.com");
+        account.setUser(user);
+
+        TransactionDto transac = new TransactionDto();
+        transac.setAmount(new BigDecimal("100"));
+        transac.setType(Type.USER_TO_USER);
+        transac.setDescription("remboursement");
+        transac.setSenderId(account);
+        transac.setMailBeneficiary("user2@gmail.com");
+
+        User userB = new User();
+        userB.setEmail("user2@gmail.com");
+
+        Account accountB = new Account();
+        accountB.setBalance(new BigDecimal("100"));
+
+        when(userServiceI.findOne("user1@gmail.com")).thenReturn(user);
+        when(accountServiceI.findByUserAccountId(user)).thenReturn(account);
+        when(userServiceI.findOne("user2@gmail.com")).thenReturn(userB);
+        when(accountServiceI.findByUserAccountId(userB)).thenReturn(accountB);
+        when(bankPaymentI.requestAuthorization(Mockito.any(Transaction.class))).thenReturn(false);
+        when(accountRepository.getOne(account.getAccountId())).thenReturn(account);
+        when(accountRepository.getOne(accountB.getAccountId())).thenReturn(accountB);
+
+        String reponse = transactionService.save(transac);
+
+        assertThat(reponse).isEqualToIgnoringCase("error");
+        assertThat(accountB.getBalance()).isEqualTo(new BigDecimal("100"));
+        assertThat(account.getBalance()).isEqualTo(new BigDecimal("105"));
+    }
+
+    @Test
+    void testTransactionUserToUserInSuccessAccountBalanceAndFeeOk() throws Exception {
 
         Account account = new Account();
         account.setBalance(new BigDecimal("105"));
@@ -82,7 +120,7 @@ public class TransactionServiceTest {
     }
 
     @Test
-    void testTransactionUserToUserNotEnoughMoney() {
+    void testTransactionUserToUserNotEnoughMoney() throws Exception {
 
         Account account = new Account();
         account.setBalance(new BigDecimal("100"));
@@ -119,7 +157,7 @@ public class TransactionServiceTest {
     }
 
     @Test
-    void testTransactionBankPaymentBalanceUpdateOk() {
+    void testTransactionBankPaymentBalanceUpdateOk() throws Exception {
 
         Account account = new Account();
         account.setBalance(new BigDecimal("100"));
@@ -147,7 +185,7 @@ public class TransactionServiceTest {
     }
 
     @Test
-    void testTransactionBankWithraw() {
+    void testTransactionBankWithraw() throws Exception {
 
         Account account = new Account();
         account.setBalance(new BigDecimal("100"));
@@ -175,7 +213,7 @@ public class TransactionServiceTest {
     }
 
     @Test
-    void testTransactionBankWithrawNotEnoughMoney() {
+    void testTransactionBankWithrawNotEnoughMoney() throws Exception {
 
         Account account = new Account();
         account.setBalance(new BigDecimal("100"));

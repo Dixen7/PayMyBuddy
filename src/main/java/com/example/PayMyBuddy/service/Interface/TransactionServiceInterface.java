@@ -8,6 +8,6 @@ import com.example.PayMyBuddy.model.Type;
 public interface TransactionServiceInterface {
 
     Iterable<Transaction> findAllBySenderId(Account account);
-    String save(TransactionDto transactionDto);
+    String save(TransactionDto transactionDto) throws Exception;
     Iterable<Transaction> findAllBySenderIdAndType(Account account, Type userToUser);
 }

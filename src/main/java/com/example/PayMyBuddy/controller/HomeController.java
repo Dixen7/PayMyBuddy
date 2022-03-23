@@ -92,7 +92,7 @@ public class HomeController {
      * @return
      */
     @PostMapping
-    public String transfer(@ModelAttribute("transaction") TransactionDto transactionDto) {
+    public String transfer(@ModelAttribute("transaction") TransactionDto transactionDto) throws Exception {
 
         // recovery identity user connected, the entity and this account
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -92,9 +92,8 @@ public class TransferController {
      * @return
      */
     @PostMapping("/transfer")
-    public String transfer(@ModelAttribute("transaction") TransactionDto transactionDto) {
+    public String transfer(@ModelAttribute("transaction") TransactionDto transactionDto) throws Exception {
 
-        // recovery identity user connected, the entity and this account
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userServiceI.findOne(username);

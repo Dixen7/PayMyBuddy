@@ -2,8 +2,7 @@ package com.example.PayMyBuddy.Service;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
 
@@ -18,37 +17,27 @@ import com.example.PayMyBuddy.service.UserService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
-    @Mock
-    private UserDetailsService userDetailsService;
-
-    @Mock
     private static UserRepository userRepository;
-
-    @Mock
     private static AccountService accountServiceInterface;
-
-    @Mock
     private static PasswordEncoder passwordEncoder;
-
     private static UserService userService;
 
     @BeforeAll
     private static void setup() {
+        userRepository = mock(UserRepository.class);
+        accountServiceInterface = mock(AccountService.class);
+        passwordEncoder = mock(PasswordEncoder.class);
         userService = new UserService(userRepository, accountServiceInterface, passwordEncoder);
     }
 
-    
     UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
     User user = new User();
     User userSave = new User();

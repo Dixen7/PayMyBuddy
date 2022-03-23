@@ -7,38 +7,30 @@ import com.example.PayMyBuddy.repository.BankAccountRepository;
 import com.example.PayMyBuddy.repository.UserRepository;
 import com.example.PayMyBuddy.service.BankAccountService;
 import com.example.PayMyBuddy.service.Interface.UserServiceInterface;
-import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@WebMvcTest(BankAccountService.class)
 @ExtendWith(MockitoExtension.class)
 public class BankAccountServiceTest {
 
-    @MockBean
-    @Qualifier("userDetailsServiceImpl")
-    private UserDetailsService userDetailsService;
+    private static BankAccountRepository bankAccountRepository;
+    private static UserServiceInterface userServiceI;
+    private static UserRepository userRepository;
+    private static BankAccountService bankAccountService;
 
-    @MockBean
-    BankAccountRepository bankAccountRepository;
-
-    @MockBean
-    UserServiceInterface userServiceI;
-
-    @MockBean
-    UserRepository userRepository;
-
-    @Autowired
-    BankAccountService bankAccountService;
+    @BeforeAll
+    private static void setup() {
+        bankAccountRepository = mock(BankAccountRepository.class);
+        userServiceI = mock(UserServiceInterface.class);
+        userRepository = mock(UserRepository.class);
+        bankAccountService = new BankAccountService(bankAccountRepository, userServiceI, userRepository);
+    }
 
     @Test
     void testNewBankAccountSetSuccess() {

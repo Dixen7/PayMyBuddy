@@ -11,47 +11,37 @@ import com.example.PayMyBuddy.service.Interface.AccountServiceInterface;
 import com.example.PayMyBuddy.service.Interface.BankPaymentInterface;
 import com.example.PayMyBuddy.service.Interface.UserServiceInterface;
 import com.example.PayMyBuddy.service.TransactionService;
-import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@WebMvcTest(TransactionService.class)
 @ExtendWith(MockitoExtension.class)
 public class TransactionServiceTest {
 
-    @MockBean
-    TransactionRepository transactionRepository;
+    private static UserServiceInterface userServiceI;
+    private static AccountServiceInterface accountServiceI;
+    private static BankPaymentInterface bankPaymentI;
+    private static AccountRepository accountRepository;
+    private static TransactionRepository transactionRepository;
+    private static TransactionService transactionService;
 
-    @MockBean
-    @Qualifier("userDetailsServiceImpl")
-    private UserDetailsService userDetailsService;
-
-    @MockBean
-    UserServiceInterface userBuddyServiceI;
-
-    @MockBean
-    AccountServiceInterface accountServiceI;
-
-    @MockBean
-    BankPaymentInterface bankPaymentI;
-
-    @MockBean
-    AccountRepository accountRepository;
-
-    @Autowired
-    TransactionService transactionService;
+    @BeforeAll
+    private static void setup() {
+        accountRepository = mock(AccountRepository.class);
+        bankPaymentI = mock(BankPaymentInterface.class);
+        accountServiceI = mock(AccountServiceInterface.class);
+        userServiceI = mock(UserServiceInterface.class);
+        transactionRepository = mock(TransactionRepository.class);
+        transactionService = new TransactionService(transactionRepository, userServiceI, accountServiceI, bankPaymentI, accountRepository);
+    }
 
     @Test
     void testTransactionUserToUserInSuccessAccountBalanceAndFeeOk() {
@@ -76,9 +66,9 @@ public class TransactionServiceTest {
         Account accountB = new Account();
         accountB.setBalance(new BigDecimal("100"));
 
-        when(userBuddyServiceI.findOne("user1@gmail.com")).thenReturn(user);
+        when(userServiceI.findOne("user1@gmail.com")).thenReturn(user);
         when(accountServiceI.findByUserAccountId(user)).thenReturn(account);
-        when(userBuddyServiceI.findOne("user2@gmail.com")).thenReturn(userB);
+        when(userServiceI.findOne("user2@gmail.com")).thenReturn(userB);
         when(accountServiceI.findByUserAccountId(userB)).thenReturn(accountB);
         when(bankPaymentI.requestAuthorization(Mockito.any(Transaction.class))).thenReturn(true);
         when(accountRepository.getOne(account.getAccountId())).thenReturn(account);
@@ -114,9 +104,9 @@ public class TransactionServiceTest {
         Account accountB = new Account();
         accountB.setBalance(new BigDecimal("100"));
 
-        when(userBuddyServiceI.findOne("user1@gmail.com")).thenReturn(user);
+        when(userServiceI.findOne("user1@gmail.com")).thenReturn(user);
         when(accountServiceI.findByUserAccountId(user)).thenReturn(account);
-        when(userBuddyServiceI.findOne("user2@gmail.com")).thenReturn(userB);
+        when(userServiceI.findOne("user2@gmail.com")).thenReturn(userB);
         when(accountServiceI.findByUserAccountId(userB)).thenReturn(accountB);
         when(bankPaymentI.requestAuthorization(Mockito.any(Transaction.class))).thenReturn(true);
         when(accountRepository.getOne(account.getAccountId())).thenReturn(account);
@@ -144,7 +134,7 @@ public class TransactionServiceTest {
         transac.setSenderId(account);
 
 
-        when(userBuddyServiceI.findOne("user1@gmail.com")).thenReturn(user);
+        when(userServiceI.findOne("user1@gmail.com")).thenReturn(user);
         when(accountServiceI.findByUserAccountId(user)).thenReturn(account);
         when(bankPaymentI.requestAuthorization(Mockito.any(Transaction.class))).thenReturn(true);
         when(accountRepository.getOne(account.getAccountId())).thenReturn(account);
@@ -172,7 +162,7 @@ public class TransactionServiceTest {
         transac.setSenderId(account);
 
 
-        when(userBuddyServiceI.findOne("user1@gmail.com")).thenReturn(user);
+        when(userServiceI.findOne("user1@gmail.com")).thenReturn(user);
         when(accountServiceI.findByUserAccountId(user)).thenReturn(account);
         when(bankPaymentI.requestAuthorization(Mockito.any(Transaction.class))).thenReturn(true);
         when(accountRepository.getOne(account.getAccountId())).thenReturn(account);
@@ -200,7 +190,7 @@ public class TransactionServiceTest {
         transac.setSenderId(account);
 
 
-        when(userBuddyServiceI.findOne("user1@gmail.com")).thenReturn(user);
+        when(userServiceI.findOne("user1@gmail.com")).thenReturn(user);
         when(accountServiceI.findByUserAccountId(user)).thenReturn(account);
         when(bankPaymentI.requestAuthorization(Mockito.any(Transaction.class))).thenReturn(true);
         when(accountRepository.getOne(account.getAccountId())).thenReturn(account);

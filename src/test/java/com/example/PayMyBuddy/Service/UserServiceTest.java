@@ -14,7 +14,7 @@ import com.example.PayMyBuddy.model.User;
 import com.example.PayMyBuddy.repository.UserRepository;
 import com.example.PayMyBuddy.service.AccountService;
 import com.example.PayMyBuddy.service.UserService;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -30,8 +30,8 @@ class UserServiceTest {
     private static PasswordEncoder passwordEncoder;
     private static UserService userService;
 
-    @BeforeEach
-    void setup() {
+    @BeforeAll
+    static void setup() {
         userRepository = mock(UserRepository.class);
         accountServiceInterface = mock(AccountService.class);
         passwordEncoder = mock(PasswordEncoder.class);

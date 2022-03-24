@@ -36,15 +36,15 @@ class TransactionIT {
 
     @Test
     @Transactional
-    @WithMockUser(username = "jean@gmail.com")
+    @WithMockUser(username = "admin@gmail.com")
     void testFindAllTransfer() {
 
-        User user = userRepository.findByEmail("jean@gmail.com");
+        User user = userRepository.findByEmail("admin@gmail.com");
         Account account = accountRepository.findByUser(user);
 
         Iterable<Transaction> transactions = transactionService.findAllBySenderIdAndType(account, Type.USER_TO_USER);
 
-        assertThat(transactions.toString()).contains("tien pr ta bienveillance");
+        assertThat(transactions.toString()).contains("coucou");
     }
 
 }

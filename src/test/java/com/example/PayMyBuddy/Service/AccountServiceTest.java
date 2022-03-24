@@ -9,7 +9,7 @@ import com.example.PayMyBuddy.model.Account;
 import com.example.PayMyBuddy.model.User;
 import com.example.PayMyBuddy.repository.AccountRepository;
 import com.example.PayMyBuddy.service.AccountService;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -21,8 +21,8 @@ class AccountServiceTest {
     private static AccountService accountService;
     Account account2 = new Account();
 
-    @BeforeAll
-    private static void setup() {
+    @BeforeEach
+    void setup() {
         accountRepository = mock(AccountRepository.class);
         accountService = new AccountService(accountRepository);
     }

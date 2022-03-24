@@ -11,7 +11,7 @@ import com.example.PayMyBuddy.service.Interface.AccountServiceInterface;
 import com.example.PayMyBuddy.service.Interface.BankPaymentInterface;
 import com.example.PayMyBuddy.service.Interface.UserServiceInterface;
 import com.example.PayMyBuddy.service.TransactionService;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -33,8 +33,8 @@ public class TransactionServiceTest {
     private static TransactionRepository transactionRepository;
     private static TransactionService transactionService;
 
-    @BeforeAll
-    private static void setup() {
+    @BeforeEach
+    void setup() {
         accountRepository = mock(AccountRepository.class);
         bankPaymentI = mock(BankPaymentInterface.class);
         accountServiceI = mock(AccountServiceInterface.class);

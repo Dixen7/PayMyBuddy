@@ -12,6 +12,7 @@ import com.example.PayMyBuddy.service.Interface.BankPaymentInterface;
 import com.example.PayMyBuddy.service.Interface.UserServiceInterface;
 import com.example.PayMyBuddy.service.TransactionService;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -24,17 +25,17 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class TransactionServiceTest {
+class TransactionServiceTest {
 
-    private static UserServiceInterface userServiceI;
-    private static AccountServiceInterface accountServiceI;
-    private static BankPaymentInterface bankPaymentI;
-    private static AccountRepository accountRepository;
-    private static TransactionRepository transactionRepository;
-    private static TransactionService transactionService;
+    private UserServiceInterface userServiceI;
+    private AccountServiceInterface accountServiceI;
+    private BankPaymentInterface bankPaymentI;
+    private AccountRepository accountRepository;
+    private TransactionRepository transactionRepository;
+    private TransactionService transactionService;
 
-    @BeforeAll
-    static void setup() {
+    @BeforeEach
+    void setup() {
         accountRepository = mock(AccountRepository.class);
         bankPaymentI = mock(BankPaymentInterface.class);
         accountServiceI = mock(AccountServiceInterface.class);
@@ -44,7 +45,7 @@ public class TransactionServiceTest {
     }
 
     @Test
-    public void testTransactionUserToUserWhenRequestAuthorizationIsFalse() throws Exception {
+    void testTransactionUserToUserWhenRequestAuthorizationIsFalse() throws Exception {
 
         Account account = new Account();
         account.setBalance(new BigDecimal("105"));

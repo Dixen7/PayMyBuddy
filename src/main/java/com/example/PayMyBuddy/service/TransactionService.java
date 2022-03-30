@@ -56,7 +56,7 @@ public class TransactionService implements TransactionServiceInterface {
         transactionPayment.setSenderId(account);
         Account accountB = new Account();
 
-        if (transactionDto.getType() == Type.USER_TO_USER) {
+        if (transactionDto.getType() == Type.USER_TO_USER || transactionDto.getType() == Type.TO_ADMIN_ACCOUNT) {
 
             String email = transactionDto.getMailBeneficiary();
             User userB = userServiceInterface.findOne(email);

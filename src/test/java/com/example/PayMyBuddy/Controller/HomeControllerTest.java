@@ -137,22 +137,22 @@ public class HomeControllerTest {
     @WithMockUser("user@gmail.com")
     void testTransfer() throws Exception {
 
-        TransactionDto transac = new TransactionDto();
-        User user =new User();
+        TransactionDto transaction = new TransactionDto();
+        User user = new User();
         user.setEmail("user@gmail.com");
         Account account = new Account();
-        account.setBalance(new BigDecimal("200"));
+        account.setBalance(new BigDecimal("300"));
         account.setUser(user);
         when(userServiceI.findOne("user@gmail.com")).thenReturn(user);
         when(accountServiceI.findByUserAccountId(user)).thenReturn(account);
-        when(transactionServiceI.save(transac)).thenReturn("success");
+        when(transactionServiceI.save(transaction)).thenReturn("success");
 
-        transac.setAmount(new BigDecimal("100"));
-        transac.setSenderId(account);
-        transac.setDescription("payment");
+        transaction.setAmount(new BigDecimal("100"));
+        transaction.setSenderId(account);
+        transaction.setDescription("payment");
 
         RequestBuilder request = post("/home")
-                .param("description", transac.getDescription()).param("amount", transac.getAmount().toString());
+                .param("description", transaction.getDescription()).param("amount", transaction.getAmount().toString());
 
         mockMvc
                 .perform(request)

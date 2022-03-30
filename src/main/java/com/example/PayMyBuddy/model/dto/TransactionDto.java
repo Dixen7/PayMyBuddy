@@ -2,11 +2,13 @@ package com.example.PayMyBuddy.model.dto;
 
 import com.example.PayMyBuddy.model.Account;
 import com.example.PayMyBuddy.model.Type;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Data
+@Getter
+@Setter
 public class TransactionDto {
 
     private BigDecimal amount;

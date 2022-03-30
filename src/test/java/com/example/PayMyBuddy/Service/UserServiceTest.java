@@ -14,7 +14,6 @@ import com.example.PayMyBuddy.model.User;
 import com.example.PayMyBuddy.repository.UserRepository;
 import com.example.PayMyBuddy.service.AccountService;
 import com.example.PayMyBuddy.service.UserService;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

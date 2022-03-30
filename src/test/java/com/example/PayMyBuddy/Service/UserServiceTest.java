@@ -15,6 +15,7 @@ import com.example.PayMyBuddy.repository.UserRepository;
 import com.example.PayMyBuddy.service.AccountService;
 import com.example.PayMyBuddy.service.UserService;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -25,13 +26,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
-    private static UserRepository userRepository;
-    private static AccountService accountServiceInterface;
-    private static PasswordEncoder passwordEncoder;
-    private static UserService userService;
+    private UserRepository userRepository;
+    private AccountService accountServiceInterface;
+    private PasswordEncoder passwordEncoder;
+    private UserService userService;
 
-    @BeforeAll
-    static void setup() {
+    @BeforeEach
+    void setup() {
         userRepository = mock(UserRepository.class);
         accountServiceInterface = mock(AccountService.class);
         passwordEncoder = mock(PasswordEncoder.class);

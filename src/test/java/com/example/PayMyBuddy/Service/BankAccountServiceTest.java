@@ -7,25 +7,24 @@ import com.example.PayMyBuddy.repository.BankAccountRepository;
 import com.example.PayMyBuddy.repository.UserRepository;
 import com.example.PayMyBuddy.service.BankAccountService;
 import com.example.PayMyBuddy.service.Interface.UserServiceInterface;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class BankAccountServiceTest {
 
-    private static BankAccountRepository bankAccountRepository;
-    private static UserServiceInterface userServiceI;
-    private static UserRepository userRepository;
-    private static BankAccountService bankAccountService;
+    private BankAccountRepository bankAccountRepository;
+    private UserServiceInterface userServiceI;
+    private UserRepository userRepository;
+    private BankAccountService bankAccountService;
 
-    @BeforeAll
-    static void setup() {
+    @BeforeEach
+    void setup() {
         bankAccountRepository = mock(BankAccountRepository.class);
         userServiceI = mock(UserServiceInterface.class);
         userRepository = mock(UserRepository.class);
@@ -35,7 +34,6 @@ public class BankAccountServiceTest {
     @Test
     void testNewBankAccountSetSuccess() {
 
-        BankAccountDto bankAccountDto = new BankAccountDto();
         BankAccount bankAccount = new BankAccount();
         bankAccount.setAccountNumber("100s85s6669800000");
         bankAccount.setBankAccountId(1L);
@@ -43,6 +41,7 @@ public class BankAccountServiceTest {
         bankAccount.setHolder("user user");
         bankAccount.setIban("100s85s6669800000");
 
+        BankAccountDto bankAccountDto = new BankAccountDto();
         bankAccountDto.setAccountNumber("100s85s6669800000");
         bankAccountDto.setBankAccountId(1L);
         bankAccountDto.setBic("psstrf520pptd");
@@ -58,17 +57,18 @@ public class BankAccountServiceTest {
         userSave.setEmail("user@gmail.com");
         userSave.setId(1L);
 
-        when(bankAccountRepository.save(bankAccount)).thenReturn(bankAccount);
         when(userServiceI.findOne(bankAccountDto.getEmail())).thenReturn(user);
         when(userRepository.getOne(user.getId())).thenReturn(userSave);
         when(userRepository.save(userSave)).thenReturn(userSave);
 
-        String result = bankAccountService.save(bankAccountDto);
-        assertThat(result).isEqualToIgnoringCase("success");
+        String response = bankAccountService.save(bankAccountDto);
+        BankAccount userBankAccount = userSave.getBankAccount();
 
-        BankAccount bankA = userSave.getBankAccount();
-
-        assertThat(bankA.getHolder()).isEqualToIgnoringCase("user user");
+        verify(userServiceI).findOne(userSave.getEmail());
+        verify(userRepository).getOne(userSave.getId());
+        verify(userRepository).save(userSave);
+        assertThat(response).isEqualToIgnoringCase("success");
+        assertThat(userBankAccount.getHolder()).isEqualToIgnoringCase("user user");
 
     }
 }

@@ -44,7 +44,7 @@ class TransactionIT {
 
         Iterable<Transaction> transactions = transactionService.findAllBySenderIdAndType(account, Type.USER_TO_USER);
 
-        assertThat(transactions.toString()).contains("coucou");
+        assertThat(transactions.toString()).contains("remboursement cadeau");
     }
 
 }

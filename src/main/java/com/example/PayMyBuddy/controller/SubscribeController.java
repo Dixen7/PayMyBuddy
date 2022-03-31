@@ -28,14 +28,13 @@ public class SubscribeController {
 
     @GetMapping
     public String showRegistrationForm() {
+        log.info("Request get /subscribe called");
         return "subscribe";
     }
 
     @PostMapping
-    public String registerUserAccount(
-            @ModelAttribute("user") UserRegistrationDto userRegistrationDto) {
+    public String registerUserAccount(@ModelAttribute("user") UserRegistrationDto userRegistrationDto) {
 
-        //Verify if user already exist or account inactive
         User user = userServiceInterface.findOne(userRegistrationDto.getEmail());
 
         if (userServiceInterface.existsUserByEmail(userRegistrationDto.getEmail())) {

@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UnsubscribeController {
 
     @Autowired
-    UserServiceInterface userServiceI;
+    UserServiceInterface userServiceInterface;
 
     /**
      * Unsuscribe page
@@ -31,7 +31,7 @@ public class UnsubscribeController {
      */
     @GetMapping
     public String unsuscribe(Model model) {
-
+        log.info("Request get /unsubscribe called");
         return "unsuscribe";
     }
 
@@ -51,7 +51,9 @@ public class UnsubscribeController {
         if (!userDto.getEmail().equalsIgnoreCase(userDto.getEmailConfirm())) {
             return "redirect:/unsuscribe?error";
         }
-        User responseUser = userServiceI.unsubscribe(userDto);
+
+        User responseUser = userServiceInterface.unsubscribe(userDto);
+
         if (responseUser == null) {
             return "redirect:/unsuscribe?errorMonney";
         }

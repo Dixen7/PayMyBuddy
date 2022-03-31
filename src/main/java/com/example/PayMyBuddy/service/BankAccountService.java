@@ -8,7 +8,6 @@ import com.example.PayMyBuddy.repository.UserRepository;
 import com.example.PayMyBuddy.service.Interface.BankAccountServiceInterface;
 import com.example.PayMyBuddy.service.Interface.UserServiceInterface;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,12 +15,12 @@ import org.springframework.stereotype.Service;
 public class BankAccountService implements BankAccountServiceInterface {
 
     private BankAccountRepository bankAccountRepository;
-    private UserServiceInterface userServiceI;
+    private UserServiceInterface userServiceInterface;
     private UserRepository userRepository;
 
-    public BankAccountService(BankAccountRepository bankAccountRepository, UserServiceInterface userServiceI, UserRepository userRepository) {
+    public BankAccountService(BankAccountRepository bankAccountRepository, UserServiceInterface userServiceInterface, UserRepository userRepository) {
         this.bankAccountRepository = bankAccountRepository;
-        this.userServiceI = userServiceI;
+        this.userServiceInterface = userServiceInterface;
         this.userRepository = userRepository;
     }
 
@@ -35,13 +34,11 @@ public class BankAccountService implements BankAccountServiceInterface {
         bankAccount.setHolder(bankAccountDto.getHolder());
 
         log.debug("bankAccount" + bankAccount);
-
         bankAccountRepository.save(bankAccount);
 
-        User user = userServiceI.findOne(bankAccountDto.getEmail());
+        User user = userServiceInterface.findOne(bankAccountDto.getEmail());
         Long id = user.getId();
 
-        // add bank account to entity user
         User userToUpdate = userRepository.getOne(id);
         log.debug("userToUpdate" + userToUpdate);
         userToUpdate.setBankAccount(bankAccount);

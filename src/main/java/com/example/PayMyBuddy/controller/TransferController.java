@@ -32,16 +32,16 @@ import lombok.extern.slf4j.Slf4j;
 public class TransferController {
 
     @Autowired
-    UserServiceInterface userServiceI;
+    UserServiceInterface userServiceInterface;
 
     @Autowired
-    TransactionServiceInterface transactionServiceI;
+    TransactionServiceInterface transactionServiceInterface;
 
     @Autowired
-    ConnectionServiceInterface connectionServiceI;
+    ConnectionServiceInterface connectionServiceInterface;
 
     @Autowired
-    AccountServiceInterface accountServiceI;
+    AccountServiceInterface accountServiceInterface;
 
     @ModelAttribute("transaction")
     public TransactionDto transactionDto() {
@@ -58,12 +58,11 @@ public class TransferController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        User user = userServiceI.findOne(username);
-        Account account = accountServiceI.findByUserAccountId(user);
+        User user = userServiceInterface.findOne(username);
+        Account account = accountServiceInterface.findByUserAccountId(user);
 
-        //To display transfers and connections
         Iterable<Transaction> listTransaction = null;
-        listTransaction = transactionServiceI.findAllBySenderIdAndType(account, Type.USER_TO_USER);
+        listTransaction = transactionServiceInterface.findAllBySenderIdAndType(account, Type.USER_TO_USER);
         Set<User> contacts = user.getContacts();
         model.addAttribute("transactions", listTransaction);
         model.addAttribute("contacts", contacts);
@@ -78,8 +77,8 @@ public class TransferController {
      */
     @PostMapping("/connection")
     public String addConnection(@ModelAttribute("user") UserConnectionDto userConnectionDto) {
-        if (userServiceI.existsUserByEmail(userConnectionDto.getEmail())) {
-            connectionServiceI.add(userConnectionDto);
+        if (userServiceInterface.existsUserByEmail(userConnectionDto.getEmail())) {
+            connectionServiceInterface.add(userConnectionDto);
             return "redirect:/transfer?successAddConnection";
         } else {
             return "redirect:/transfer?errorAddConnection";
@@ -96,21 +95,26 @@ public class TransferController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        User user = userServiceI.findOne(username);
-        Account account = accountServiceI.findByUserAccountId(user);
+        User user = userServiceInterface.findOne(username);
+        Account account = accountServiceInterface.findByUserAccountId(user);
+
         if (transactionDto.getAmount().compareTo(BigDecimal.ZERO) > 0) {
             transactionDto.setSenderId(account);
             transactionDto.setType(Type.USER_TO_USER);
+
+            String response = transactionServiceInterface.save(transactionDto);
+
             log.debug("transactionController : " + transactionDto.getSenderId());
-            String reponse = transactionServiceI.save(transactionDto);
-            log.debug("reponse : "+ reponse);
+            log.debug("response : "+ response);
             log.debug("transactionDto : "+ transactionDto);
 
-            if (reponse == "success") {
+            if (response == "success") {
                 return "redirect:/transfer?successPayment";
-            } else if (reponse == "errorNotEnoughMoney") {
+
+            } else if (response == "errorNotEnoughMoney") {
                 return "redirect:/transfer?errorNotEnoughMoney";
-            } else if (reponse == "inactive") {
+
+            } else if (response == "inactive") {
                 return "redirect:/transfer?errorInactive";
             }
         }

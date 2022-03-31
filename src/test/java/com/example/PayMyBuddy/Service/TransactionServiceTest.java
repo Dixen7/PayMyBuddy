@@ -11,7 +11,7 @@ import com.example.PayMyBuddy.service.Interface.AccountServiceInterface;
 import com.example.PayMyBuddy.service.Interface.BankPaymentInterface;
 import com.example.PayMyBuddy.service.Interface.UserServiceInterface;
 import com.example.PayMyBuddy.service.TransactionService;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -20,21 +20,20 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class TransactionServiceTest {
+class TransactionServiceTest {
 
-    private static UserServiceInterface userServiceI;
-    private static AccountServiceInterface accountServiceI;
-    private static BankPaymentInterface bankPaymentI;
-    private static AccountRepository accountRepository;
-    private static TransactionRepository transactionRepository;
-    private static TransactionService transactionService;
+    private UserServiceInterface userServiceI;
+    private AccountServiceInterface accountServiceI;
+    private BankPaymentInterface bankPaymentI;
+    private AccountRepository accountRepository;
+    private TransactionRepository transactionRepository;
+    private TransactionService transactionService;
 
-    @BeforeAll
-    private static void setup() {
+    @BeforeEach
+    void setup() {
         accountRepository = mock(AccountRepository.class);
         bankPaymentI = mock(BankPaymentInterface.class);
         accountServiceI = mock(AccountServiceInterface.class);
@@ -44,40 +43,36 @@ public class TransactionServiceTest {
     }
 
     @Test
-    public void testTransactionUserToUserWhenRequestAuthorizationIsFalse() throws Exception {
+    void testTransactionUserToUserWhenRequestAuthorizationIsFalse() throws Exception {
 
         Account account = new Account();
         account.setBalance(new BigDecimal("105"));
         account.setAccountId(1);
+
         User user = new User();
         user.setEmail("user1@gmail.com");
         account.setUser(user);
 
-        TransactionDto transac = new TransactionDto();
-        transac.setAmount(new BigDecimal("100"));
-        transac.setType(Type.USER_TO_USER);
-        transac.setDescription("remboursement");
-        transac.setSenderId(account);
-        transac.setMailBeneficiary("user2@gmail.com");
+        TransactionDto transactionDto = new TransactionDto();
+        transactionDto.setAmount(new BigDecimal("100"));
+        transactionDto.setType(Type.USER_TO_USER);
+        transactionDto.setDescription("remboursement");
+        transactionDto.setSenderId(account);
+        transactionDto.setMailBeneficiary("user2@gmail.com");
 
-        User userB = new User();
-        userB.setEmail("user2@gmail.com");
+        User otherUser = new User();
+        otherUser.setEmail("user2@gmail.com");
 
-        Account accountB = new Account();
-        accountB.setBalance(new BigDecimal("100"));
+        Account otherAccount = new Account();
+        otherAccount.setBalance(new BigDecimal("100"));
 
-        when(userServiceI.findOne("user1@gmail.com")).thenReturn(user);
-        when(accountServiceI.findByUserAccountId(user)).thenReturn(account);
-        when(userServiceI.findOne("user2@gmail.com")).thenReturn(userB);
-        when(accountServiceI.findByUserAccountId(userB)).thenReturn(accountB);
         when(bankPaymentI.requestAuthorization(Mockito.any(Transaction.class))).thenReturn(false);
-        when(accountRepository.getOne(account.getAccountId())).thenReturn(account);
-        when(accountRepository.getOne(accountB.getAccountId())).thenReturn(accountB);
+        when(userServiceI.findOne("user2@gmail.com")).thenReturn(otherUser);
 
-        String reponse = transactionService.save(transac);
+        String response = transactionService.save(transactionDto);
 
-        assertThat(reponse).isEqualToIgnoringCase("error");
-        assertThat(accountB.getBalance()).isEqualTo(new BigDecimal("100"));
+        assertThat(response).isEqualToIgnoringCase("error");
+        assertThat(otherAccount.getBalance()).isEqualTo(new BigDecimal("100"));
         assertThat(account.getBalance()).isEqualTo(new BigDecimal("105"));
     }
 
@@ -87,35 +82,34 @@ public class TransactionServiceTest {
         Account account = new Account();
         account.setBalance(new BigDecimal("105"));
         account.setAccountId(1);
+
         User user = new User();
         user.setEmail("user1@gmail.com");
         account.setUser(user);
 
-        TransactionDto transac = new TransactionDto();
-        transac.setAmount(new BigDecimal("100"));
-        transac.setType(Type.USER_TO_USER);
-        transac.setDescription("remboursement");
-        transac.setSenderId(account);
-        transac.setMailBeneficiary("user2@gmail.com");
+        TransactionDto transactionDto = new TransactionDto();
+        transactionDto.setAmount(new BigDecimal("100"));
+        transactionDto.setType(Type.USER_TO_USER);
+        transactionDto.setDescription("remboursement");
+        transactionDto.setSenderId(account);
+        transactionDto.setMailBeneficiary("user2@gmail.com");
 
-        User userB = new User();
-        userB.setEmail("user2@gmail.com");
+        User otherUser = new User();
+        otherUser.setEmail("user2@gmail.com");
 
-        Account accountB = new Account();
-        accountB.setBalance(new BigDecimal("100"));
+        Account otherAccount = new Account();
+        otherAccount.setBalance(new BigDecimal("100"));
 
-        when(userServiceI.findOne("user1@gmail.com")).thenReturn(user);
-        when(accountServiceI.findByUserAccountId(user)).thenReturn(account);
-        when(userServiceI.findOne("user2@gmail.com")).thenReturn(userB);
-        when(accountServiceI.findByUserAccountId(userB)).thenReturn(accountB);
         when(bankPaymentI.requestAuthorization(Mockito.any(Transaction.class))).thenReturn(true);
+        when(userServiceI.findOne("user2@gmail.com")).thenReturn(otherUser);
+        when(accountServiceI.findByUserAccountId(otherUser)).thenReturn(otherAccount);
         when(accountRepository.getOne(account.getAccountId())).thenReturn(account);
-        when(accountRepository.getOne(accountB.getAccountId())).thenReturn(accountB);
+        when(accountRepository.getOne(otherAccount.getAccountId())).thenReturn(otherAccount);
 
-        String reponse = transactionService.save(transac);
+        String response = transactionService.save(transactionDto);
 
-        assertThat(reponse).isEqualToIgnoringCase("success");
-        assertThat(accountB.getBalance()).isEqualTo(new BigDecimal("200"));
+        assertThat(response).isEqualToIgnoringCase("success");
+        assertThat(otherAccount.getBalance()).isEqualTo(new BigDecimal("200"));
         assertThat(account.getBalance()).isEqualTo(new BigDecimal("4.50"));
     }
 
@@ -125,34 +119,30 @@ public class TransactionServiceTest {
         Account account = new Account();
         account.setBalance(new BigDecimal("100"));
         account.setAccountId(1);
+
         User user = new User();
         user.setEmail("user1@gmail.com");
         account.setUser(user);
 
-        TransactionDto transac = new TransactionDto();
-        transac.setAmount(new BigDecimal("100"));
-        transac.setType(Type.USER_TO_USER);
-        transac.setDescription("remboursement");
-        transac.setSenderId(account);
-        transac.setMailBeneficiary("user2@gmail.com");
+        TransactionDto transactionDto = new TransactionDto();
+        transactionDto.setAmount(new BigDecimal("100"));
+        transactionDto.setType(Type.USER_TO_USER);
+        transactionDto.setDescription("remboursement");
+        transactionDto.setSenderId(account);
+        transactionDto.setMailBeneficiary("user2@gmail.com");
 
-        User userB = new User();
-        userB.setEmail("user2@gmail.com");
+        User otherUser = new User();
+        otherUser.setEmail("user2@gmail.com");
 
-        Account accountB = new Account();
-        accountB.setBalance(new BigDecimal("100"));
+        Account otherAccount = new Account();
+        otherAccount.setBalance(new BigDecimal("100"));
 
-        when(userServiceI.findOne("user1@gmail.com")).thenReturn(user);
-        when(accountServiceI.findByUserAccountId(user)).thenReturn(account);
-        when(userServiceI.findOne("user2@gmail.com")).thenReturn(userB);
-        when(accountServiceI.findByUserAccountId(userB)).thenReturn(accountB);
         when(bankPaymentI.requestAuthorization(Mockito.any(Transaction.class))).thenReturn(true);
-        when(accountRepository.getOne(account.getAccountId())).thenReturn(account);
-        when(accountRepository.getOne(accountB.getAccountId())).thenReturn(accountB);
+        when(userServiceI.findOne("user2@gmail.com")).thenReturn(otherUser);
 
-        String reponse = transactionService.save(transac);
+        String response = transactionService.save(transactionDto);
 
-        assertThat(reponse).isEqualToIgnoringCase("errorNotEnoughMoney");
+        assertThat(response).isEqualToIgnoringCase("errorNotEnoughMoney");
         assertThat(account.getBalance()).isEqualTo(new BigDecimal("100"));
     }
 
@@ -162,24 +152,22 @@ public class TransactionServiceTest {
         Account account = new Account();
         account.setBalance(new BigDecimal("100"));
         account.setAccountId(1);
+
         User user = new User();
         user.setEmail("user1@gmail.com");
         account.setUser(user);
 
-        TransactionDto transac = new TransactionDto();
-        transac.setAmount(new BigDecimal("100"));
-        transac.setDescription("payment");
-        transac.setSenderId(account);
+        TransactionDto transactionDto = new TransactionDto();
+        transactionDto.setAmount(new BigDecimal("100"));
+        transactionDto.setDescription("payment");
+        transactionDto.setSenderId(account);
 
-
-        when(userServiceI.findOne("user1@gmail.com")).thenReturn(user);
-        when(accountServiceI.findByUserAccountId(user)).thenReturn(account);
         when(bankPaymentI.requestAuthorization(Mockito.any(Transaction.class))).thenReturn(true);
         when(accountRepository.getOne(account.getAccountId())).thenReturn(account);
 
-        String reponse = transactionService.save(transac);
+        String response = transactionService.save(transactionDto);
 
-        assertThat(reponse).isEqualToIgnoringCase("success");
+        assertThat(response).isEqualToIgnoringCase("success");
         assertThat(account.getBalance()).isEqualTo(new BigDecimal("200"));
 
     }
@@ -190,24 +178,22 @@ public class TransactionServiceTest {
         Account account = new Account();
         account.setBalance(new BigDecimal("100"));
         account.setAccountId(1);
+
         User user = new User();
         user.setEmail("user1@gmail.com");
         account.setUser(user);
 
-        TransactionDto transac = new TransactionDto();
-        transac.setAmount(new BigDecimal("100"));
-        transac.setDescription("withdraw");
-        transac.setSenderId(account);
+        TransactionDto transactionDto = new TransactionDto();
+        transactionDto.setAmount(new BigDecimal("100"));
+        transactionDto.setDescription("withdraw");
+        transactionDto.setSenderId(account);
 
-
-        when(userServiceI.findOne("user1@gmail.com")).thenReturn(user);
-        when(accountServiceI.findByUserAccountId(user)).thenReturn(account);
         when(bankPaymentI.requestAuthorization(Mockito.any(Transaction.class))).thenReturn(true);
         when(accountRepository.getOne(account.getAccountId())).thenReturn(account);
 
-        String reponse = transactionService.save(transac);
+        String response = transactionService.save(transactionDto);
 
-        assertThat(reponse).isEqualToIgnoringCase("success");
+        assertThat(response).isEqualToIgnoringCase("success");
         assertThat(account.getBalance()).isEqualTo(new BigDecimal("0"));
 
     }
@@ -227,15 +213,10 @@ public class TransactionServiceTest {
         transac.setDescription("withdraw");
         transac.setSenderId(account);
 
-
-        when(userServiceI.findOne("user1@gmail.com")).thenReturn(user);
-        when(accountServiceI.findByUserAccountId(user)).thenReturn(account);
         when(bankPaymentI.requestAuthorization(Mockito.any(Transaction.class))).thenReturn(true);
-        when(accountRepository.getOne(account.getAccountId())).thenReturn(account);
+        String response = transactionService.save(transac);
 
-        String reponse = transactionService.save(transac);
-
-        assertThat(reponse).isEqualToIgnoringCase("errorNotEnoughMoney");
+        assertThat(response).isEqualToIgnoringCase("errorNotEnoughMoney");
         assertThat(account.getBalance()).isEqualTo(new BigDecimal("100"));
 
     }

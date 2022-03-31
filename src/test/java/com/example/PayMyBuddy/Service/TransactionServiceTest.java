@@ -23,7 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-//@MockitoSettings(strictness = Strictness.LENIENT)
 class TransactionServiceTest {
 
     private UserServiceInterface userServiceI;
@@ -67,9 +66,8 @@ class TransactionServiceTest {
         Account otherAccount = new Account();
         otherAccount.setBalance(new BigDecimal("100"));
 
-        when(userServiceI.findOne("user2@gmail.com")).thenReturn(otherUser);
-        when(accountServiceI.findByUserAccountId(otherUser)).thenReturn(otherAccount);
         when(bankPaymentI.requestAuthorization(Mockito.any(Transaction.class))).thenReturn(false);
+        when(userServiceI.findOne("user2@gmail.com")).thenReturn(otherUser);
 
         String response = transactionService.save(transactionDto);
 
@@ -102,9 +100,9 @@ class TransactionServiceTest {
         Account otherAccount = new Account();
         otherAccount.setBalance(new BigDecimal("100"));
 
+        when(bankPaymentI.requestAuthorization(Mockito.any(Transaction.class))).thenReturn(true);
         when(userServiceI.findOne("user2@gmail.com")).thenReturn(otherUser);
         when(accountServiceI.findByUserAccountId(otherUser)).thenReturn(otherAccount);
-        when(bankPaymentI.requestAuthorization(Mockito.any(Transaction.class))).thenReturn(true);
         when(accountRepository.getOne(account.getAccountId())).thenReturn(account);
         when(accountRepository.getOne(otherAccount.getAccountId())).thenReturn(otherAccount);
 
@@ -139,6 +137,7 @@ class TransactionServiceTest {
         Account otherAccount = new Account();
         otherAccount.setBalance(new BigDecimal("100"));
 
+        when(bankPaymentI.requestAuthorization(Mockito.any(Transaction.class))).thenReturn(true);
         when(userServiceI.findOne("user2@gmail.com")).thenReturn(otherUser);
 
         String response = transactionService.save(transactionDto);
@@ -214,6 +213,7 @@ class TransactionServiceTest {
         transac.setDescription("withdraw");
         transac.setSenderId(account);
 
+        when(bankPaymentI.requestAuthorization(Mockito.any(Transaction.class))).thenReturn(true);
         String response = transactionService.save(transac);
 
         assertThat(response).isEqualToIgnoringCase("errorNotEnoughMoney");

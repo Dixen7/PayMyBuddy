@@ -53,16 +53,12 @@ public class TransactionService implements TransactionServiceInterface {
         Account accountBeneficiary = new Account();
         User beneficiary = userServiceInterface.findOne(email);
 
-        if (transactionPayment.getType() == Type.USER_TO_USER) {
-            userToUserTransfer(transactionDto, transactionPayment,  accountSender, beneficiary);
-        } else {
-            bankTransfer(transactionDto, transactionPayment,  accountSender);
-        }
-
         if (bankPaymentInterface.requestAuthorization(transactionPayment)) {
-            transactionRepository.save(transactionPayment);
-            updateAccountBalance(transactionPayment, accountSender, accountBeneficiary);
-            return "success";
+            if (transactionPayment.getType() == Type.USER_TO_USER) {
+                return userToUserTransfer(transactionDto, transactionPayment,  accountSender, beneficiary);
+            } else {
+                return bankTransfer(transactionDto, transactionPayment,  accountSender, accountBeneficiary);
+            }
         } else {
             return "error";
         }
@@ -79,21 +75,26 @@ public class TransactionService implements TransactionServiceInterface {
 
         if (transactionDto.getType().equals(Type.USER_TO_USER) && accountSender.getBalance().compareTo(transactionDto.getAmount().add(transactionPayment.getFee())) < 0) {
             return "errorNotEnoughMoney";
+        } else {
+            transactionRepository.save(transactionPayment);
+            updateAccountBalance(transactionPayment, accountSender, accountBeneficiary);
+            return "success";
         }
-        return "success";
     }
 
-    private String bankTransfer(TransactionDto transactionDto, Transaction transactionPayment,  Account accountSender) {
-
-        if (transactionDto.getDescription().equalsIgnoreCase("withdraw") && accountSender.getBalance().compareTo(transactionDto.getAmount()) < 0) {
-            return "errorNotEnoughMoney";
-        }
+    private String bankTransfer(TransactionDto transactionDto, Transaction transactionPayment,  Account accountSender, Account accountBeneficiary) {
 
         transactionPayment.setType(Type.BANK_TRANSFER);
         transactionPayment.setBeneficiaryId(accountSender);
         transactionPayment.setFee(new BigDecimal("0"));
 
-        return "success";
+        if (transactionDto.getDescription().equalsIgnoreCase("withdraw") && accountSender.getBalance().compareTo(transactionDto.getAmount()) < 0) {
+            return "errorNotEnoughMoney";
+        } else {
+            transactionRepository.save(transactionPayment);
+            updateAccountBalance(transactionPayment, accountSender, accountBeneficiary);
+            return "success";
+        }
     }
 
     private void updateAccountBalance(Transaction transactionPayment,  Account accountSender, Account accountBeneficiary) {
@@ -122,7 +123,6 @@ public class TransactionService implements TransactionServiceInterface {
         transactionPayment.setSenderId(transactionDto.getSenderId());
         return transactionPayment;
     }
-
     @Override
     public Iterable<Transaction> findAllBySenderIdAndType(Account account, Type userToUser) {
         return transactionRepository.findAllBySenderIdAndType(account, userToUser);

@@ -58,12 +58,3 @@ The app has unit tests written. To run the tests from maven, go to the folder th
 # Physical data model Explaining the structure of the database tables
 
 ![pmbMpd](https://user-images.githubusercontent.com/52921038/161936859-cb7a5a75-8204-434a-9df1-fe55b629e487.png)
-
-# Deployment
-Then there are three possibilities to deploy the project :
-
-Through the IDE with "Run as", "Spring Boot App".
-
-With the maven spring-boot:run goal.
-
-By running the JAR using the java -jar command.

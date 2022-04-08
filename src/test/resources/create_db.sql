@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS pay_my_buddy.user (
     bank_account_id	BIGINT                  NULL DEFAULT NULL,
     PRIMARY KEY (user_id),
     FOREIGN KEY (bank_account_id)
-    REFERENCES pay_my_buddy_test.bank_account (bank_account_id));
+    REFERENCES pay_my_buddy.bank_account (bank_account_id));
 
 
 -- -----------------------------------------------------
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS pay_my_buddy.connexion (
     user_associate_id   BIGINT NOT NULL,
     PRIMARY KEY (user_id, user_associate_id),
     FOREIGN KEY (user_associate_id)
-    REFERENCES pay_my_buddy_test.user (user_id),
+    REFERENCES pay_my_buddy.user (user_id),
     FOREIGN KEY (user_id)
     REFERENCES pay_my_buddy.user (user_id));
 

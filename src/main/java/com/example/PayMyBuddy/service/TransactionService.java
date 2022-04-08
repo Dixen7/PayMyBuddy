@@ -30,17 +30,16 @@ public class TransactionService implements TransactionServiceInterface {
     private BankPaymentInterface bankPaymentInterface;
     private AccountRepository accountRepository;
 
-    public TransactionService(TransactionRepository transactionRepository, UserServiceInterface userServiceInterface, AccountServiceInterface accountServiceInterface, BankPaymentInterface bankPaymentInterface, AccountRepository accountRepository) {
+    public TransactionService(TransactionRepository transactionRepository,
+                              UserServiceInterface userServiceInterface,
+                              AccountServiceInterface accountServiceInterface,
+                              BankPaymentInterface bankPaymentInterface,
+                              AccountRepository accountRepository) {
         this.transactionRepository = transactionRepository;
         this.userServiceInterface = userServiceInterface;
         this.accountServiceInterface = accountServiceInterface;
         this.bankPaymentInterface = bankPaymentInterface;
         this.accountRepository = accountRepository;
-    }
-
-    @Override
-    public Iterable<Transaction> findAllBySenderId(Account account) {
-        return transactionRepository.findAllBySenderId(account);
     }
 
     @Override

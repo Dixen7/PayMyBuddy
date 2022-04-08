@@ -57,4 +57,5 @@ The app has unit tests written. To run the tests from maven, go to the folder th
 
 # Physical data model Explaining the structure of the database tables
 
-![pmbMpd](https://user-images.githubusercontent.com/52921038/161936859-cb7a5a75-8204-434a-9df1-fe55b629e487.png)
+![Balestrino_Clement_2_mdp_022022](https://user-images.githubusercontent.com/52921038/162394233-129433b1-b26e-4e97-8583-9571d6a6d682.png)
+
